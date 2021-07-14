@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "anshitsu"
+version = "0.1.0"
+description = "A tiny digital photographic utility."
+authors = ["Iosif Takakura <iosif@huideyeren.info>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = "^1.21.0"
+Pillow = "^8.3.1"
+colorcorrect = "^0.9.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = "^3.9.2"
+mypy = "^0.910"
+black = "^21.6b0"
+isort = "^5.9.2"
+pyproject-flake8 = "^0.0.1-alpha.2"
+pytest-randomly = "^3.8.0"
+tox = "^3.23.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.flake8]
+max-line-length = 88
+ignore = "E501,E203,W503,W504"
+
+[tool.black]
+line-length = 88
+
+[tool.mypy]
+ignore_missing_imports=1
