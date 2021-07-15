@@ -6,9 +6,14 @@
     "python.linting.pylintEnabled": false,
     "editor.formatOnSave": true,
     "python.formatting.provider": "black",
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": true
-    },
+    "editor.codeActionsOnSave": null,
     "autoDocstring.includeName": true,
     "autoDocstring.startOnNewLine": true,
+    "cSpell.words": [
+        "colorcorrect",
+        "isort",
+        "mypy",
+        "pyproject",
+        "pytest"
+    ],
 }
