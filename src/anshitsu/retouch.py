@@ -18,7 +18,7 @@ class Retouch:
         self,
         colorautoadjust: bool = False,
         colorstretch: bool = False,
-        glayscale: bool = False,
+        grayscale: bool = False,
         negative: bool = False,
         tosaka: Optional[float] = None,
     ) -> Image:
@@ -29,7 +29,7 @@ class Retouch:
         Args:
             colorautoadjust (bool, optional): [description]. Defaults to False.
             colorstretch (bool, optional): [description]. Defaults to False.
-            glayscale (bool, optional): [description]. Defaults to False.
+            grayscale (bool, optional): [description]. Defaults to False.
             negative (bool, optional): [description]. Defaults to False.
             tosaka (Optional[float], optional): [description]. Defaults to None.
 
@@ -47,8 +47,8 @@ class Retouch:
 
         self.img = self.__rgba_convert(self.img)
 
-        if glayscale:
-            self.img = self.__glayscale(self.img)
+        if grayscale:
+            self.img = self.__grayscale(self.img)
 
         if tosaka is not None:
             self.img = self.__tosaka(self.img, tosaka)
@@ -80,9 +80,9 @@ class Retouch:
         """
         return to_pil(cca.stretch(cca.grey_world(from_pil(img))))
 
-    def __glayscale(self, img: Image) -> Image:
+    def __grayscale(self, img: Image) -> Image:
         """
-        __glayscale [summary]
+        __grayscale [summary]
 
         Args:
             img (Image): base image.
