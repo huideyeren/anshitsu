@@ -27,10 +27,6 @@ anshitsu = "anshitsu.cli:main"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.flake8]
-max-line-length = 88
-ignore = "E501,E203,W503,W504"
-
 [tool.black]
 line-length = 88
 
