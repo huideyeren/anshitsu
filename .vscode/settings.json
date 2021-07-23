@@ -1,7 +1,7 @@
 {
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
-    "python.linting.mypyEnabled": true,
+    "python.linting.mypyEnabled": false,
     "python.linting.pylintEnabled": false,
     "python.formatting.provider": "black",
     "editor.formatOnSave": true,
@@ -19,7 +19,6 @@
         "rgba",
         "tosaka"
     ],
-    "python.linting.flake8Path": ".venv/bin/pflake8",
     "[python]":{
         "editor.codeActionsOnSave":{
            "source.organizeImports":true
