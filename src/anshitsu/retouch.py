@@ -24,26 +24,24 @@ class Retouch:
         self.tosaka = tosaka
 
     def process(self) -> Image:
-        image = self.image
-
         if self.negative:
-            image = self.__negative()
+            self.image = self.__negative()
 
         if self.colorautoadjust:
-            image = self.__colorautoadjust()
+            self.image = self.__colorautoadjust()
 
         if self.colorstretch:
-            image = self.__colorstretch()
+            self.image = self.__colorstretch()
 
-        image = self.__rgba_convert()
+        self.image = self.__rgba_convert()
 
         if self.grayscale:
-            image = self.__grayscale()
+            self.image = self.__grayscale()
 
         if self.tosaka is not None:
-            image = self.__tosaka()
+            self.image = self.__tosaka()
 
-        return image
+        return self.image
 
     def __colorautoadjust(self) -> Image:
         """
@@ -80,20 +78,20 @@ class Retouch:
         Returns:
             Image: processed image.
         """
-        image = self.image
-        if image.mode == "L" or image.mode == "LA":
-            return image
+        if self.image.mode == "L" or self.image.mode == "LA":
+            return self.image
 
-        if image.mode != "RGB":
-            image = image.convert("RGB")
-        rgb = np.array(image, dtype="float32")
+        if self.image.mode != "RGB":
+            self.image = self.image.convert("RGB")
+        rgb = np.array(self.image, dtype="float32")
 
         rgbL = pow(rgb / 255.0, 2.2)
         r, g, b = rgbL[:, :, 0], rgbL[:, :, 1], rgbL[:, :, 2]
         grayL = 0.299 * r + 0.587 * g + 0.114 * b  # BT.601
         gray = pow(grayL, 1.0 / 2.2) * 255
+        self.image = Image.fromarray(gray.astype("uint8"))
 
-        return Image.fromarray(gray.astype("uint8"))
+        return self.image
 
     def __negative(self) -> Image:
         """
@@ -119,7 +117,8 @@ class Retouch:
             Image: processed image.
         """
         imageC = ImageEnhance.Contrast(self.image)
-        return imageC.enhance(self.tosaka)
+        self.image = imageC.enhance(self.tosaka)
+        return self.image
 
     def __rgba_convert(self) -> Image:
         """
@@ -131,9 +130,8 @@ class Retouch:
         Returns:
             Image: processed image.
         """
-        image = self.image
-        if image.mode == "RGBA":
-            image.load()
-            background = Image.new("RGB", image.size, (255, 255, 255))
-            background.paste(image, mask=image.split()[3])
-        return image
+        if self.image.mode == "RGBA":
+            self.image.load()
+            background = Image.new("RGB", self.image.size, (255, 255, 255))
+            background.paste(self.image, mask=self.image.split()[3])
+        return self.image
