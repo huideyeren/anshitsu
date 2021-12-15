@@ -56,11 +56,17 @@ def process(
         raise fire.core.FireError("A non-path string was passed.")
     for i, file in enumerate(files_glob):
         image = Image.open(file)
-        retouch = Retouch()
-        image = retouch.process(
-            image, colorautoadjust, colorstretch, grayscale, negative, tosaka
+        retouch = Retouch(
+            image=image,
+            colorautoadjust=colorautoadjust,
+            colorstretch=colorstretch,
+            grayscale=grayscale,
+            negative=negative,
+            tosaka=tosaka,
         )
-        image.Image.save(
+        saved_image = retouch.process()
+        os.makedirs(os.path.join(return_path, "out"), exist_ok=True)
+        saved_image.save(
             os.path.join(
                 return_path,
                 "out",
