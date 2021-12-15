@@ -11,15 +11,13 @@ class Retouch:
     Retouch generator.
     """
 
-    def __init__(self, image: Image) -> None:
-        self.img = image
-
     def process(
         self,
-        colorautoadjust: bool = False,
-        colorstretch: bool = False,
-        grayscale: bool = False,
-        negative: bool = False,
+        image: Image,
+        colorautoadjust: bool,
+        colorstretch: bool,
+        grayscale: bool,
+        negative: bool,
         tosaka: Optional[float] = None,
     ) -> Image:
         """
@@ -27,6 +25,7 @@ class Retouch:
             processing images.
 
         Args:
+            image (Image): [description].
             colorautoadjust (bool, optional): [description]. Defaults to False.
             colorstretch (bool, optional): [description]. Defaults to False.
             grayscale (bool, optional): [description]. Defaults to False.
@@ -37,65 +36,65 @@ class Retouch:
             Image: [description]
         """
         if negative:
-            self.img = self.__negative(self.img)
+            image = self.__negative(image)
 
         if colorautoadjust:
-            self.img = self.__colorautoadjust(self.img)
+            image = self.__colorautoadjust(image)
 
         if colorstretch:
-            self.img = self.__colorstretch(self.img)
+            image = self.__colorstretch(image)
 
-        self.img = self.__rgba_convert(self.img)
+        image = self.__rgba_convert(image)
 
         if grayscale:
-            self.img = self.__grayscale(self.img)
+            image = self.__grayscale(image)
 
         if tosaka is not None:
-            self.img = self.__tosaka(self.img, tosaka)
+            image = self.__tosaka(image, tosaka)
 
-        return self.img
+        return image
 
-    def __colorautoadjust(self, img: Image) -> Image:
+    def __colorautoadjust(self, image: Image) -> Image:
         """
         __colorautoadjust
 
 
         Args:
-            img (Image): base image.
+            image (Image): base image.
 
         Returns:
             Image: processed image.
         """
-        return to_pil(cca.automatic_color_equalization(from_pil(img)))
+        return to_pil(cca.automatic_color_equalization(from_pil(image)))
 
-    def __colorstretch(self, img: Image) -> Image:
+    def __colorstretch(self, image: Image) -> Image:
         """
         __colorstretch [summary]
 
         Args:
-            img (Image): base image.
+            image (Image): base image.
 
         Returns:
             Image: processed image.
         """
-        return to_pil(cca.stretch(cca.grey_world(from_pil(img))))
+        return to_pil(cca.stretch(cca.grey_world(from_pil(image))))
 
-    def __grayscale(self, img: Image) -> Image:
+    def __grayscale(self, image: Image) -> Image:
         """
         __grayscale [summary]
 
         Args:
-            img (Image): base image.
+            image (Image): base image.
 
         Returns:
             Image: processed image.
         """
-        if img.mode == "L" or img.mode == "LA":
-            return img
+        if image.mode == "L" or image.mode == "LA":
+            return image
 
-        if img.mode != "RGB":
-            img = img.convert("RGB")
-        rgb = np.array(img, dtype="float32")
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+        rgb = np.array(image, dtype="float32")
 
         rgbL = pow(rgb / 255.0, 2.2)
         r, g, b = rgbL[:, :, 0], rgbL[:, :, 1], rgbL[:, :, 2]
@@ -104,44 +103,44 @@ class Retouch:
 
         return Image.fromarray(gray.astype("uint8"))
 
-    def __negative(self, img: Image) -> Image:
+    def __negative(self, image: Image) -> Image:
         """
         __negative [summary]
 
         Args:
-            img (Image): base image.
+            image (Image): base image.
 
         Returns:
             Image: processed image.
         """
-        return ImageOps.invert(img)
+        return ImageOps.invert(image)
 
-    def __tosaka(self, img: Image, tosaka: float) -> Image:
+    def __tosaka(self, image: Image, tosaka: float) -> Image:
         """
         __tosaka [summary]
 
         Args:
-            img (Image): base image.
+            image (Image): base image.
             tosaka (float): [description]
 
         Returns:
             Image: processed image.
         """
-        imgC = ImageEnhance.Contrast(img)
-        return imgC.enhance(tosaka)
+        imageC = ImageEnhance.Contrast(image)
+        return imageC.enhance(tosaka)
 
-    def __rgba_convert(self, img: Image) -> Image:
+    def __rgba_convert(self, image: Image) -> Image:
         """
         __rgba_convert [summary]
 
         Args:
-            img (Image): base image.
+            image (Image): base image.
 
         Returns:
             Image: processed image.
         """
-        if img.mode == "RGBA":
-            img.load()
-            background = Image.new("RGB", img.size, (255, 255, 255))
-            background.paste(img, mask=img.split()[3])
-        return img
+        if image.mode == "RGBA":
+            image.load()
+            background = Image.new("RGB", image.size, (255, 255, 255))
+            background.paste(image, mask=image.split()[3])
+        return image
