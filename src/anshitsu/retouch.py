@@ -116,6 +116,8 @@ class Retouch:
         Returns:
             Image: processed image.
         """
+        if self.image.mode != "L":
+            self.image = self.__grayscale()
         imageC = ImageEnhance.Contrast(self.image)
         self.image = imageC.enhance(self.tosaka)
         return self.image
@@ -134,4 +136,10 @@ class Retouch:
             self.image.load()
             background = Image.new("RGB", self.image.size, (255, 255, 255))
             background.paste(self.image, mask=self.image.split()[3])
+            self.image = background
+        if self.image.mode == "LA":
+            self.image.load()
+            background = Image.new("L", self.image.size, (255))
+            background.paste(self.image, mask=self.image.split()[1])
+            self.image = background
         return self.image

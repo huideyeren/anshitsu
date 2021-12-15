@@ -11,7 +11,7 @@
             "module": "anshitsu.cli",
             "args": [
                 "~/darkroom/negative/",
-                "--tosaka=1.5"
+                "--tosaka=2.4"
             ]
         }
     ]
