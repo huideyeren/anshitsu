@@ -7,6 +7,10 @@ from PIL import Image, ImageEnhance, ImageOps
 
 
 class Retouch:
+    """
+    [summary]
+    """
+
     def __init__(
         self,
         image: Image,
@@ -16,6 +20,17 @@ class Retouch:
         negative: bool = False,
         tosaka: Optional[float] = None,
     ) -> None:
+        """
+        __init__ [summary]
+
+        Args:
+            image (Image): [description]
+            colorautoadjust (bool, optional): [description]. Defaults to False.
+            colorstretch (bool, optional): [description]. Defaults to False.
+            grayscale (bool, optional): [description]. Defaults to False.
+            negative (bool, optional): [description]. Defaults to False.
+            tosaka (Optional[float], optional): [description]. Defaults to None.
+        """
         self.image = image
         self.colorautoadjust = colorautoadjust
         self.colorstretch = colorstretch
