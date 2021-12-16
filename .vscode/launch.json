@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "anshitsu.cli",
             "args": [
-                "~/darkroom/negative/",
+                "./tests/pic/",
                 "--tosaka=2.4"
             ]
         }
