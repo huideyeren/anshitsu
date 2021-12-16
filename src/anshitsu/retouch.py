@@ -39,6 +39,8 @@ class Retouch:
         self.tosaka = tosaka
 
     def process(self) -> Image:
+        self.image = self.__rgba_convert()
+
         if self.negative:
             self.image = self.__negative()
 
@@ -47,8 +49,6 @@ class Retouch:
 
         if self.colorstretch:
             self.image = self.__colorstretch()
-
-        self.image = self.__rgba_convert()
 
         if self.grayscale:
             self.image = self.__grayscale()
@@ -69,6 +69,8 @@ class Retouch:
         Returns:
             Image: processed image.
         """
+        if self.image.mode == "L" or self.image.mode == "LA":
+            return self.image
         return to_pil(cca.automatic_color_equalization(from_pil(self.image)))
 
     def __colorstretch(self) -> Image:
@@ -81,6 +83,8 @@ class Retouch:
         Returns:
             Image: processed image.
         """
+        if self.image.mode == "L" or self.image.mode == "LA":
+            return self.image
         return to_pil(cca.stretch(cca.grey_world(from_pil(self.image))))
 
     def __grayscale(self) -> Image:
