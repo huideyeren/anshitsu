@@ -20,21 +20,27 @@ def process(
     tosaka: Optional[float] = None,
 ) -> str:
     """
-    process [summary]
+    Process Runnner for Command Line Interface
+
+    This utility converts the colors of images such as photos.
+    If you specify a directory path, it will convert the image files in the specified directory.
+    If you specify a file path, it will convert the specified file.
+    If you specify an option, the specified conversion will be performed.
+    Tosaka mode is a mode that expresses the preference of Tosaka-senpai, a character in "Kyūkyoku Chōjin R", for "photos taken with Tri-X that look like they were burned onto No. 4 or No. 5 photographic paper". Only use floating-point numbers when using this mode; numbers around 2.4 will make it look right.
 
     Args:
-        path (str): [description]
-        colorautoadjust (bool, optional): [description]. Defaults to False.
-        colorstretch (bool, optional): [description]. Defaults to False.
-        grayscale (bool, optional): [description]. Defaults to False.
-        negative (bool, optional): [description]. Defaults to False.
-        tosaka (Optional[float], optional): [description]. Defaults to None.
+        path (str): Directory or File Path
+        colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
+        colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
+        grayscale (bool, optional): Convert to grayscale. Defaults to False.
+        negative (bool, optional): Invert color. Defaults to False.
+        tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
 
     Raises:
-        fire.core.FireError: [description]
+        fire.core.FireError: Error that occurs when the specified string is not a path.
 
     Returns:
-        str: [description]
+        str: Message.
     """
     types = ("*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.png", "*.PNG")
     files_glob = []

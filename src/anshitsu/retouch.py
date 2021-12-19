@@ -8,7 +8,9 @@ from PIL import Image, ImageEnhance, ImageOps
 
 class Retouch:
     """
-    [summary]
+    Perform retouching.
+
+    Passing an image and options to the constructor will convert the specified image.
     """
 
     def __init__(
@@ -21,15 +23,15 @@ class Retouch:
         tosaka: Optional[float] = None,
     ) -> None:
         """
-        __init__ [summary]
+        __init__ constructor.
 
         Args:
-            image (Image): [description]
-            colorautoadjust (bool, optional): [description]. Defaults to False.
-            colorstretch (bool, optional): [description]. Defaults to False.
-            grayscale (bool, optional): [description]. Defaults to False.
-            negative (bool, optional): [description]. Defaults to False.
-            tosaka (Optional[float], optional): [description]. Defaults to None.
+            image (Image): Image file.
+            colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
+            colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
+            grayscale (bool, optional): Convert to grayscale. Defaults to False.
+            negative (bool, optional): Invert color. Defaults to False.
+            tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
         """
         self.image = image
         self.colorautoadjust = colorautoadjust
@@ -62,6 +64,7 @@ class Retouch:
         """
         __colorautoadjust
 
+        Use colorautoadjust algorithm.
 
         Args:
             image (Image): base image.
@@ -75,7 +78,9 @@ class Retouch:
 
     def __colorstretch(self) -> Image:
         """
-        __colorstretch [summary]
+        __colorstretch
+
+        Use colorstretch algorithm.
 
         Args:
             image (Image): base image.
@@ -89,7 +94,9 @@ class Retouch:
 
     def __grayscale(self) -> Image:
         """
-        __grayscale [summary]
+        __grayscale
+
+        Convert to grayscale.
 
         Args:
             image (Image): base image.
@@ -114,7 +121,9 @@ class Retouch:
 
     def __negative(self) -> Image:
         """
-        __negative [summary]
+        __negative
+
+        Invert color.
 
         Args:
             image (Image): base image.
@@ -126,7 +135,11 @@ class Retouch:
 
     def __tosaka(self) -> Image:
         """
-        __tosaka [summary]
+        __tosaka
+
+        Use Tosaka mode.
+
+        Tosaka mode is a mode that expresses the preference of Tosaka-senpai, a character in "Kyūkyoku Chōjin R", for "photos taken with Tri-X that look like they were burned onto No. 4 or No. 5 photographic paper". Only use floating-point numbers when using this mode; numbers around 2.4 will make it look right.
 
         Args:
             image (Image): base image.
@@ -143,7 +156,9 @@ class Retouch:
 
     def __rgba_convert(self) -> Image:
         """
-        __rgba_convert [summary]
+        __rgba_convert
+
+        Converts image data that contains transparency to image data that does not contain transparency.
 
         Args:
             image (Image): base image.
