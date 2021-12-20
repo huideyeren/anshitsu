@@ -3,6 +3,10 @@ name = "anshitsu"
 version = "0.2.0"
 description = "A tiny digital photographic utility."
 authors = ["Iosif Takakura <iosif@huideyeren.info>"]
+homepage = "https://github.com/huideyeren"
+repository = "https://github.com/huideyeren/anshitsu"
+documentation = "https://github.com/huideyeren/anshitsu"
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.8"
