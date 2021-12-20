@@ -23,6 +23,7 @@ def process(
     Process Runnner for Command Line Interface
 
     This utility converts the colors of images such as photos.
+
     If you specify a directory path, it will convert
     the image files in the specified directory.
     If you specify a file path, it will convert the specified file.
@@ -32,6 +33,7 @@ def process(
     for "photos taken with Tri-X that look like they were
     burned onto No. 4 or No. 5 photographic paper".
     Only use floating-point numbers when using this mode;
+
     numbers around 2.4 will make it look right.
 
     Args:
