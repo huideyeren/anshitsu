@@ -104,11 +104,9 @@ class Retouch:
         Returns:
             Image: processed image.
         """
-        if self.image.mode == "L" or self.image.mode == "LA":
+        if self.image.mode == "L":
             return self.image
 
-        if self.image.mode != "RGB":
-            self.image = self.image.convert("RGB")
         rgb = np.array(self.image, dtype="float32")
 
         rgbL = pow(rgb / 255.0, 2.2)
