@@ -28,12 +28,12 @@ def process(
     the image files in the specified directory.
     If you specify a file path, it will convert the specified file.
     If you specify an option, the specified conversion will be performed.
+
     Tosaka mode is a mode that expresses the preference of
     Tosaka-senpai, a character in "Kyūkyoku Chōjin R",
     for "photos taken with Tri-X that look like they were
     burned onto No. 4 or No. 5 photographic paper".
     Only use floating-point numbers when using this mode;
-
     numbers around 2.4 will make it look right.
 
     Args:
