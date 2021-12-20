@@ -1,6 +1,6 @@
 import fire
 import pytest
-from anshitsu.cli import process
+from anshitsu.process import process
 
 
 def test_main_for_dir(capsys):
