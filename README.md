@@ -1,6 +1,6 @@
 # Anshitsu
 
-[![Testing](https://github.com/huideyeren/anshitsu/actions/workflows/python-package.yml/badge.svg)](https://github.com/huideyeren/anshitsu/actions/workflows/python-package.yml)
+[![Testing](https://github.com/huideyeren/anshitsu/actions/workflows/testing.yml/badge.svg)](https://github.com/huideyeren/anshitsu/actions/workflows/testing.yml)
 
 [![codecov](https://codecov.io/gh/huideyeren/anshitsu/branch/main/graph/badge.svg?token=ZYRX8NBTLQ)](https://codecov.io/gh/huideyeren/anshitsu)
 
