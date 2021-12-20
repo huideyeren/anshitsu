@@ -19,7 +19,7 @@ class Retouch:
         colorautoadjust: bool = False,
         colorstretch: bool = False,
         grayscale: bool = False,
-        negative: bool = False,
+        invert: bool = False,
         tosaka: Optional[float] = None,
     ) -> None:
         """
@@ -30,21 +30,21 @@ class Retouch:
             colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
             colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
             grayscale (bool, optional): Convert to grayscale. Defaults to False.
-            negative (bool, optional): Invert color. Defaults to False.
+            invert (bool, optional): Invert color. Defaults to False.
             tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
         """
         self.image = image
         self.colorautoadjust = colorautoadjust
         self.colorstretch = colorstretch
         self.grayscale = grayscale
-        self.negative = negative
+        self.invert = invert
         self.tosaka = tosaka
 
     def process(self) -> Image:
         self.image = self.__rgba_convert()
 
-        if self.negative:
-            self.image = self.__negative()
+        if self.invert:
+            self.image = self.__invert()
 
         if self.colorautoadjust:
             self.image = self.__colorautoadjust()
@@ -117,9 +117,9 @@ class Retouch:
 
         return self.image
 
-    def __negative(self) -> Image:
+    def __invert(self) -> Image:
         """
-        __negative
+        __invert
 
         Invert color.
 

@@ -16,7 +16,7 @@ def process(
     colorautoadjust: bool = False,
     colorstretch: bool = False,
     grayscale: bool = False,
-    negative: bool = False,
+    invert: bool = False,
     tosaka: Optional[float] = None,
 ) -> str:
     """
@@ -41,7 +41,7 @@ def process(
         colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
         colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
         grayscale (bool, optional): Convert to grayscale. Defaults to False.
-        negative (bool, optional): Invert color. Defaults to False.
+        invert (bool, optional): Invert color. Defaults to False.
         tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
 
     Raises:
@@ -75,7 +75,7 @@ def process(
             colorautoadjust=colorautoadjust,
             colorstretch=colorstretch,
             grayscale=grayscale,
-            negative=negative,
+            invert=invert,
             tosaka=tosaka,
         )
         saved_image = retouch.process()

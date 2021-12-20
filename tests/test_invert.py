@@ -4,37 +4,37 @@ from anshitsu import retouch
 from PIL import Image
 
 
-def test_negative_by_rgb():
+def test_invert_by_rgb():
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
-    rt = retouch.Retouch(image=image, negative=True)
+    rt = retouch.Retouch(image=image, invert=True)
     gray = rt.process()
     assert gray.mode == "RGB"
 
 
-def test_negative_by_grayscale():
+def test_invert_by_grayscale():
     image = Image.open(
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
-    rt = retouch.Retouch(image=image, negative=True)
+    rt = retouch.Retouch(image=image, invert=True)
     gray = rt.process()
     assert gray.mode == "L"
 
 
-def test_negative_by_rgba():
+def test_invert_by_rgba():
     image = Image.open(
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
-    rt = retouch.Retouch(image=image, negative=True)
+    rt = retouch.Retouch(image=image, invert=True)
     gray = rt.process()
     assert gray.mode == "RGB"
 
 
-def test_negative_by_grayscale_with_alpha():
+def test_invert_by_grayscale_with_alpha():
     image = Image.open(
         os.path.join(".", "tests", "pic", "test.png"),
     )
-    rt = retouch.Retouch(image=image, negative=True)
+    rt = retouch.Retouch(image=image, invert=True)
     gray = rt.process()
     assert gray.mode == "L"
