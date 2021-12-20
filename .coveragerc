@@ -1,5 +1,5 @@
 [run]
 omit =
-    src/cli.py
-    src/__init__.py
+    src/anshitsu/cli.py
+    src/anshitsu/__init__.py
     tests/*
