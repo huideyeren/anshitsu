@@ -6,7 +6,7 @@ from typing import Optional
 
 import fire
 import fire.core
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 from anshitsu.retouch import Retouch
 
@@ -63,13 +63,20 @@ def process(
                 )
             )
         return_path = path
+        if len(files_glob) == 0:
+            raise fire.core.FireError(
+                "There are no JPEG or PNG files in this directory."
+            )
     elif os.path.isfile(path):
         files_glob.extend(glob.glob(path))
         return_path = os.path.abspath(os.path.join(path, os.pardir))
     else:
         raise fire.core.FireError("A non-path string was passed.")
     for i, file in enumerate(files_glob):
-        image = Image.open(file)
+        try:
+            image = Image.open(file)
+        except UnidentifiedImageError as e:
+            raise fire.core.FireError(e)
         retouch = Retouch(
             image=image,
             colorautoadjust=colorautoadjust,
