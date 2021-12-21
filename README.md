@@ -113,9 +113,9 @@ A. Rizzi, C. Gatta and D. Marini, "A new algorithm for unsupervised global and l
 
 ### colorstretch
 
-以下の論文に掲載された "gray world” アルゴリズムと "stretch" アルゴリズムを組み合わせて色の補正をかけます。
+The "gray world" and "stretch" algorithms described in the following paper are combined to apply color correction.
 
-この処理は “colorautoajust” で使用するアルゴリズムに比べて高速です。
+This process is faster than the algorithm used in "colorautoajust".
 
 (References)
 
