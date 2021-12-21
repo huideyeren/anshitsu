@@ -8,9 +8,21 @@ A tiny digital photographic utility.
 
 "Anshitsu" means a darkroom in Japanese.
 
+## Install
+
+Run this command in an environment where Python 3.8 or higher is installed.
+
+We have tested it on Windows, Mac, and Ubuntu on GitHub Actions, but we have not tested it on Macs with Apple Silicon, so please use it at your own risk on Macs with Apple Silicon.
+
+``` shell
+pip install anshitsu
+```
+
 ## Usage
 
-```
+It is as described in the following help.
+
+``` shell
 INFO: Showing help with the command 'anshitsu -- --help'.
 
 NAME
@@ -65,22 +77,35 @@ NOTES
     You can also use flags syntax for POSITIONAL ARGUMENTS
 ```
 
+If a directory is specified in the path, an `out` directory will be created in the specified directory, and the converted JPEG and PNG images will be stored in JPEG format.
 
+If you specify a JPEG or PNG image file as the path, an `out` directory will be created in the directory where the image is stored, and the converted image will be stored in JPEG format.
+
+Note: If you specify
+If you specify a file of any other format in the path, error handling is not available. An error will probably occur and the program will terminate abnormally.
 
 ## Algorithm
+
+The following algorithms are available in this tool.
 
 ### RGBA to RGB Convert
 
 Converts an image that contains Alpha, such as RGBA, to image data that does not contain Alpha.
 Transparent areas will be filled with white.
 
+This algorithm is performed on any image file.
+
 ### invert
 
-Color inversion by pillow.
+Inverts the colors of an image using Pillow's built-in algorithm.
+
+In the case of negative film, color conversion that takes into account the film base color is not performed, but we plan to follow up with a feature to be developed in the future.
 
 ### colorautoajust
 
-Using "automatic color equalization" algorithm.
+We will use the "automatic color equalization" algorithm described in the following paper to apply color correction.
+
+This process is more time consuming than the algorithm used in "colorstretch", but it can reproduce more natural colors.
 
 (References)
 
@@ -88,7 +113,9 @@ A. Rizzi, C. Gatta and D. Marini, "A new algorithm for unsupervised global and l
 
 ### colorstretch
 
-Using "stretch" algorithm after "gray world" algorithm.
+以下の論文に掲載された "gray world” アルゴリズムと "stretch" アルゴリズムを組み合わせて色の補正をかけます。
+
+この処理は “colorautoajust” で使用するアルゴリズムに比べて高速です。
 
 (References)
 
@@ -96,7 +123,7 @@ D. Nikitenko, M. Wirth and K. Trudel, "Applicability Of White-Balancing Algorith
 
 ### grayscale
 
-I implemented it based on the method described in this article.
+Convert a color image to grayscale using the algorithm described in the following article.
 
 [Python でグレースケール(grayscale)化](https://qiita.com/yoya/items/dba7c40b31f832e9bc2a#pilpillow-%E3%81%A7%E3%82%B0%E3%83%AC%E3%83%BC%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%AB%E5%8C%96-numpy-%E3%81%A7%E4%BD%8E%E8%BC%9D%E5%BA%A6%E5%AF%BE%E5%BF%9C)
 
