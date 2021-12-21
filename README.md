@@ -38,7 +38,7 @@ DESCRIPTION
     the image files in the specified directory.
     If you specify a file path, it will convert the specified file.
     If you specify an option, the specified conversion will be performed.
-    
+
     Tosaka mode is a mode that expresses the preference of
     Tosaka-senpai, a character in "Kyūkyoku Chōjin R",
     for "photos taken with Tri-X that look like they were
@@ -64,7 +64,7 @@ FLAGS
         Type: bool
         Default: False
         Convert to grayscale. Defaults to False.
-    --invert=invert
+    --invert=INVERT
         Type: bool
         Default: False
         Invert color. Defaults to False.
