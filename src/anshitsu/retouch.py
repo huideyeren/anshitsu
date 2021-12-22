@@ -177,7 +177,6 @@ class Retouch:
         Returns:
             Image: processed image.
         """
-        if self.image.mode == "RGB":
-            return self.image
         if self.image.mode == "L":
-            return self.image.convert("RGB")
+            self.image = self.image.convert("RGB")
+        return self.image
