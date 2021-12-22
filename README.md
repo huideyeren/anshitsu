@@ -72,6 +72,10 @@ FLAGS
         Type: Optional[typing.Un...
         Default: None
         Use Tosaka mode. Defaults to None.
+    --outputrgb=OUTPUTRGB
+        Type: bool
+        Default: False
+        Outputs a monochrome image in RGB. Defaults to False.
 
 NOTES
     You can also use flags syntax for POSITIONAL ARGUMENTS
@@ -136,6 +140,10 @@ Tosaka mode is a mode that expresses the preference of Tosaka-senpai, a characte
 Only use floating-point numbers when using this mode; numbers around 2.4 will make it look right.
 
 When this mode is specified, color images will also be converted to grayscale.
+
+### outputrgb
+
+Outputs a monochrome image in RGB.
 
 ## Special Thanks
 

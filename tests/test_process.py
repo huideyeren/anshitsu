@@ -5,7 +5,7 @@ from PIL import UnidentifiedImageError
 
 
 def test_main_for_dir(capsys):
-    fire.Fire(process, ["./tests/pic"])
+    fire.Fire(process, ["./tests/pic", "--tosaka=2.4", "--outputrgb"])
     captured = capsys.readouterr()
     result = captured.out
     assert "The process was completed successfully." in result

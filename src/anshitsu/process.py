@@ -18,6 +18,7 @@ def process(
     grayscale: bool = False,
     invert: bool = False,
     tosaka: Optional[float] = None,
+    outputrgb: bool = False,
 ) -> str:
     """
     Process Runnner for Command Line Interface
@@ -43,6 +44,7 @@ def process(
         grayscale (bool, optional): Convert to grayscale. Defaults to False.
         invert (bool, optional): Invert color. Defaults to False.
         tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
+        outputrgb (bool, optional): Outputs a monochrome image in RGB. Defaults to False.
 
     Raises:
         fire.core.FireError: Error that occurs when the specified string is not a path.
@@ -84,6 +86,7 @@ def process(
             grayscale=grayscale,
             invert=invert,
             tosaka=tosaka,
+            outputrgb=outputrgb,
         )
         saved_image = retouch.process()
         os.makedirs(os.path.join(return_path, "out"), exist_ok=True)
