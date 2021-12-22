@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "anshitsu"
-version = "1.1.1"
+version = "1.2.0"
 description = "A tiny digital photographic utility."
 readme = "README.md"
 authors = ["Iosif Takakura <iosif@huideyeren.info>"]

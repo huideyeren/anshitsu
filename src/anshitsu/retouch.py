@@ -21,6 +21,7 @@ class Retouch:
         grayscale: bool = False,
         invert: bool = False,
         tosaka: Optional[float] = None,
+        outputrgb: bool = False,
     ) -> None:
         """
         __init__ constructor.
@@ -32,6 +33,7 @@ class Retouch:
             grayscale (bool, optional): Convert to grayscale. Defaults to False.
             invert (bool, optional): Invert color. Defaults to False.
             tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
+            outputrgb (bool, optional): Outputs a monochrome image in RGB. Defaults to False.
         """
         self.image = image
         self.colorautoadjust = colorautoadjust
@@ -39,6 +41,7 @@ class Retouch:
         self.grayscale = grayscale
         self.invert = invert
         self.tosaka = tosaka
+        self.output_rgb = outputrgb
 
     def process(self) -> Image:
         self.image = self.__rgba_convert()
@@ -58,6 +61,9 @@ class Retouch:
         if self.tosaka is not None:
             self.image = self.__tosaka()
 
+        if self.output_rgb:
+            self.image = self.__output_rgb()
+
         return self.image
 
     def __colorautoadjust(self) -> Image:
@@ -65,9 +71,6 @@ class Retouch:
         __colorautoadjust
 
         Use colorautoadjust algorithm.
-
-        Args:
-            image (Image): base image.
 
         Returns:
             Image: processed image.
@@ -82,9 +85,6 @@ class Retouch:
 
         Use colorstretch algorithm.
 
-        Args:
-            image (Image): base image.
-
         Returns:
             Image: processed image.
         """
@@ -97,9 +97,6 @@ class Retouch:
         __grayscale
 
         Convert to grayscale.
-
-        Args:
-            image (Image): base image.
 
         Returns:
             Image: processed image.
@@ -123,9 +120,6 @@ class Retouch:
 
         Invert color.
 
-        Args:
-            image (Image): base image.
-
         Returns:
             Image: processed image.
         """
@@ -137,11 +131,12 @@ class Retouch:
 
         Use Tosaka mode.
 
-        Tosaka mode is a mode that expresses the preference of Tosaka-senpai, a character in "Kyūkyoku Chōjin R", for "photos taken with Tri-X that look like they were burned onto No. 4 or No. 5 photographic paper". Only use floating-point numbers when using this mode; numbers around 2.4 will make it look right.
-
-        Args:
-            image (Image): base image.
-            tosaka (float): [description]
+        Tosaka mode is a mode that expresses the preference of
+        Tosaka-senpai, a character in "Kyūkyoku Chōjin R",
+        for "photos taken with Tri-X that look like they were
+        burned onto No. 4 or No. 5 photographic paper".
+        Only use floating-point numbers when using this mode;
+        numbers around 2.4 will make it look right.
 
         Returns:
             Image: processed image.
@@ -158,9 +153,6 @@ class Retouch:
 
         Converts image data that contains transparency to image data that does not contain transparency.
 
-        Args:
-            image (Image): base image.
-
         Returns:
             Image: processed image.
         """
@@ -175,3 +167,17 @@ class Retouch:
             background.paste(self.image, mask=self.image.split()[1])
             self.image = background
         return self.image
+
+    def __output_rgb(self) -> Image:
+        """
+        __output_rgb
+
+        Outputs a monochrome image in RGB.
+
+        Returns:
+            Image: processed image.
+        """
+        if self.image.mode == "RGBA":
+            return self.image
+        if self.image.mode == "L":
+            return self.image.convert("RGB")
