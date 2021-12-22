@@ -79,6 +79,7 @@ def process(
             image = Image.open(file)
         except UnidentifiedImageError as e:
             raise fire.core.FireError(e)
+        exif = image.getexif()
         retouch = Retouch(
             image=image,
             colorautoadjust=colorautoadjust,
@@ -98,7 +99,7 @@ def process(
             ),
             quality=100,
             subsampling=0,
-            exif=saved_image.info["exif"],
+            exif=exif,
         )
         print("{0}/{1} done!".format((i + 1), str(len(files_glob))))
 
