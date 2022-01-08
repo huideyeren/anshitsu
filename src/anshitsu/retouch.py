@@ -109,7 +109,7 @@ class Retouch:
         Returns:
             Image: processed image.
         """
-        table = [x * 2.0 for x in range(256)] * len(img.getbands())
+        table = [x * 2.0 for x in range(256)] * len(self.image.getbands())
         if self.image.mode == "RGB":
             noise_image = Image.effect_noise(
                 (self.image.width, self.image.height), self.noise
