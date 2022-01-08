@@ -3,7 +3,7 @@ from typing import Optional
 import colorcorrect.algorithm as cca
 import numpy as np
 from colorcorrect.util import from_pil, to_pil
-from PIL import Image, ImageEnhance, ImageOps
+from PIL import Image, ImageChops, ImageEnhance, ImageOps
 
 
 class Retouch:
@@ -22,6 +22,7 @@ class Retouch:
         invert: bool = False,
         tosaka: Optional[float] = None,
         outputrgb: bool = False,
+        noise: Optional[int] = None,
     ) -> None:
         """
         __init__ constructor.
@@ -42,6 +43,7 @@ class Retouch:
         self.invert = invert
         self.tosaka = tosaka
         self.output_rgb = outputrgb
+        self.noise = noise
 
     def process(self) -> Image:
         self.image = self.__rgba_convert()
@@ -57,6 +59,9 @@ class Retouch:
 
         if self.grayscale:
             self.image = self.__grayscale()
+
+        if self.noise is not None:
+            self.image = self.__noise()
 
         if self.tosaka is not None:
             self.image = self.__tosaka()
@@ -75,7 +80,7 @@ class Retouch:
         Returns:
             Image: processed image.
         """
-        if self.image.mode == "L" or self.image.mode == "LA":
+        if self.image.mode == "L":
             return self.image
         return to_pil(cca.automatic_color_equalization(from_pil(self.image)))
 
@@ -88,9 +93,38 @@ class Retouch:
         Returns:
             Image: processed image.
         """
-        if self.image.mode == "L" or self.image.mode == "LA":
+        if self.image.mode == "L":
             return self.image
         return to_pil(cca.stretch(cca.grey_world(from_pil(self.image))))
+
+    def __noise(self) -> Image:
+        """
+        __noise
+
+        Add Gaussian noise.
+        To add noise, you need to specify an integer;
+        a value of about 10 will be just right.
+
+        Returns:
+            Image: processed image.
+        """
+        if self.image.mode == "RGB":
+            noise_image = Image.effect_noise(
+                (self.image.width, self.image.height), self.noise
+            ).convert("RGB")
+            self.image = ImageChops.multiply(self.image, noise_image).point(
+                lambda x: x * 2.0
+            )
+            return self.image
+        if self.image.mode == "L":
+            noise_image = Image.effect_noise(
+                (self.image.width, self.image.height), self.noise
+            )
+            self.image = ImageChops.multiply(self.image, noise_image).point(
+                lambda x: x * 2.0
+            )
+            return self.image
+        return self.image
 
     def __grayscale(self) -> Image:
         """
