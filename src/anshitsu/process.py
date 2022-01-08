@@ -19,7 +19,7 @@ def process(
     invert: bool = False,
     tosaka: Optional[float] = None,
     outputrgb: bool = False,
-    noise: Optional[int] = None,
+    noise: Optional[float] = None,
 ) -> str:
     """
     Process Runnner for Command Line Interface
@@ -46,7 +46,7 @@ def process(
         invert (bool, optional): Invert color. Defaults to False.
         tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
         outputrgb (bool, optional): Outputs a monochrome image in RGB. Defaults to False.
-        noise (Optional[int], optional): Add Gaussian noise. Defaults to None.
+        noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
 
     Raises:
         fire.core.FireError: Error that occurs when the specified string is not a path.

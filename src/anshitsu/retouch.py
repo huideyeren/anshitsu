@@ -22,7 +22,7 @@ class Retouch:
         invert: bool = False,
         tosaka: Optional[float] = None,
         outputrgb: bool = False,
-        noise: Optional[int] = None,
+        noise: Optional[float] = None,
     ) -> None:
         """
         __init__ constructor.
@@ -35,6 +35,7 @@ class Retouch:
             invert (bool, optional): Invert color. Defaults to False.
             tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
             outputrgb (bool, optional): Outputs a monochrome image in RGB. Defaults to False.
+            noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
         """
         self.image = image
         self.colorautoadjust = colorautoadjust
@@ -115,7 +116,6 @@ class Retouch:
             self.image = ImageChops.multiply(self.image, noise_image).point(
                 lambda x: x * 2.0
             )
-            return self.image
         if self.image.mode == "L":
             noise_image = Image.effect_noise(
                 (self.image.width, self.image.height), self.noise
@@ -123,7 +123,6 @@ class Retouch:
             self.image = ImageChops.multiply(self.image, noise_image).point(
                 lambda x: x * 2.0
             )
-            return self.image
         return self.image
 
     def __grayscale(self) -> Image:
