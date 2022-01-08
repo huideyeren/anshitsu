@@ -109,20 +109,17 @@ class Retouch:
         Returns:
             Image: processed image.
         """
+        table = [x * 2.0 for x in range(256)] * len(img.getbands())
         if self.image.mode == "RGB":
             noise_image = Image.effect_noise(
                 (self.image.width, self.image.height), self.noise
             ).convert("RGB")
-            self.image = ImageChops.multiply(self.image, noise_image).point(
-                lambda x: x * 2.0
-            )
+            self.image = ImageChops.multiply(self.image, noise_image).point(table)
         if self.image.mode == "L":
             noise_image = Image.effect_noise(
                 (self.image.width, self.image.height), self.noise
             )
-            self.image = ImageChops.multiply(self.image, noise_image).point(
-                lambda x: x * 2.0
-            )
+            self.image = ImageChops.multiply(self.image, noise_image).point(table)
         return self.image
 
     def __grayscale(self) -> Image:
