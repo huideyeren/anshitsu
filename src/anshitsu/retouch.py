@@ -103,8 +103,8 @@ class Retouch:
         __noise
 
         Add Gaussian noise.
-        To add noise, you need to specify an integer;
-        a value of about 10 will be just right.
+        To add noise, you need to specify floating-point numbers;
+        a value of about 10.0 will be just right.
 
         Returns:
             Image: processed image.
