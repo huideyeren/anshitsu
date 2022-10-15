@@ -2,16 +2,16 @@ name: Testing
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   testing:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11.0-rc.2", "pypy3.9"]
         poetry-version: [1.1.11]
         os: [ubuntu-latest, macos-11, windows-latest]
     runs-on: ${{ matrix.os }}
