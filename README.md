@@ -69,13 +69,17 @@ FLAGS
         Default: False
         Invert color. Defaults to False.
     --tosaka=TOSAKA
-        Type: Optional[typing.Un...
+        Type: Optional[Optional]
         Default: None
         Use Tosaka mode. Defaults to None.
     --outputrgb=OUTPUTRGB
         Type: bool
         Default: False
         Outputs a monochrome image in RGB. Defaults to False.
+    --noise=NOISE
+        Type: Optional[Optional]
+        Default: None
+        Add Gaussian noise. Defaults to None.
 
 NOTES
     You can also use flags syntax for POSITIONAL ARGUMENTS
@@ -144,6 +148,12 @@ When this mode is specified, color images will also be converted to grayscale.
 ### outputrgb
 
 Outputs a monochrome image in RGB.
+
+### noise
+
+Add Gaussian noise.
+
+To add noise, you need to specify floating-point numbers; a value of about 10.0 will be just right.
 
 ## Special Thanks
 
