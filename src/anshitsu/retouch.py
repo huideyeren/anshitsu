@@ -200,7 +200,7 @@ class Retouch:
             self.image = background
         if self.image.mode == "LA":
             self.image.load()
-            background = Image.new("L", self.image.size, (255))
+            background = Image.new("L", self.image.size, 255)
             background.paste(self.image, mask=self.image.split()[1])
             self.image = background
         return self.image
