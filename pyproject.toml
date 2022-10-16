@@ -19,7 +19,7 @@ fire = "^0.4.0"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
 flake8 = "^3.9.2"
-mypy = "^0.910"
+mypy = "^0.981"
 black = "^21.6b0"
 isort = "^5.9.2"
 pyproject-flake8 = "^0.0.1-alpha.2"
