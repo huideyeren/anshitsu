@@ -100,7 +100,7 @@ def process(
         saved_image.save(
             os.path.join(
                 return_path,
-                output_dir
+                output_dir,
                 "{0}_converted_at_{1}.jpg".format(filename, timestamp),
             ),
             quality=100,  # Specify 100 as the highest image quality
