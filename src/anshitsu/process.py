@@ -82,6 +82,7 @@ def process(
         except UnidentifiedImageError as e:
             raise fire.core.FireError(e)
         exif = image.getexif()
+        original_file_name = os.path.split(f)[1]
         retouch = Retouch(
             image=image,
             colorautoadjust=colorautoadjust,
@@ -98,9 +99,9 @@ def process(
             os.path.join(
                 return_path,
                 "out",
-                "{0}_{1}.jpg".format(now_s.strftime("%Y-%m-%d_%H-%M-%S"), (i + 1)),
+                "{0}_converted_at_{1}.jpg".format(original_file_name ,now_s.strftime("%Y-%m-%d_%H-%M-%S")),
             ),
-            quality=100,
+            quality=100, # Specify 100 as the highest image quality
             subsampling=0,
             exif=exif,
         )
