@@ -59,15 +59,13 @@ def process(
     files_glob = []
     return_path = ""
     now_s = datetime.datetime.now()
+    output_dir = "anshitsu_out"
     if os.path.isdir(path):
-        for files in types:
-            files_glob.extend(
-                glob.glob(
-                    os.path.join(path, "**", files),
-                    recursive=True,
-                )
-            )
+        for type in types:
+            files_glob.extend(glob.glob(os.path.join(path, '**', type), recursive=True))
+        files_glob = [file for file in files_glob if not file.__contains__(output_dir)]
         return_path = path
+
         if len(files_glob) == 0:
             raise fire.core.FireError(
                 "There are no JPEG or PNG files in this directory."
@@ -98,11 +96,11 @@ def process(
             noise=noise,
         )
         saved_image = retouch.process()
-        os.makedirs(os.path.join(return_path, "out"), exist_ok=True)
+        os.makedirs(os.path.join(return_path, output_dir), exist_ok=True)
         saved_image.save(
             os.path.join(
                 return_path,
-                "out",
+                output_dir,
                 "{0}_converted_at_{1}.jpg".format(filename, timestamp),
             ),
             quality=100,  # Specify 100 as the highest image quality
