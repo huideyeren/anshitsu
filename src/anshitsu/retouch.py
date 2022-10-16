@@ -12,6 +12,9 @@ class Retouch:
 
     Passing an image and options to the constructor will convert the specified image.
     """
+    RGB_RED = 255
+    RGB_GREEN = 255
+    RGB_BLUE = 255
 
     def __init__(
         self,
@@ -188,7 +191,11 @@ class Retouch:
         """
         if self.image.mode == "RGBA":
             self.image.load()
-            background = Image.new("RGB", self.image.size, (255, 255, 255))
+            background = Image.new(
+                "RGB",
+                self.image.size,
+                (self.RGB_RED, self.RGB_BLUE, self.RGB_GREEN)
+            )
             background.paste(self.image, mask=self.image.split()[3])
             self.image = background
         if self.image.mode == "LA":
