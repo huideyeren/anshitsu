@@ -1,3 +1,4 @@
+from collections import namedtuple
 from typing import Optional, Tuple
 
 import colorcorrect.algorithm as cca
@@ -12,10 +13,15 @@ class Retouch:
 
     Passing an image and options to the constructor will convert the specified image.
     """
+
     RGB_RED_VALUE: int = 255
     RGB_GREEN_VALUE: int = 255
     RGB_BLUE_VALUE: int = 255
-    RGB_WHITE_COLOR: Tuple[int, int, int] = (RGB_RED_VALUE, RGB_GREEN_VALUE, RGB_BLUE_VALUE)
+    RGB_WHITE_COLOR: Tuple[int, int, int] = (
+        RGB_RED_VALUE,
+        RGB_GREEN_VALUE,
+        RGB_BLUE_VALUE,
+    )
 
     def __init__(
         self,
@@ -130,7 +136,7 @@ class Retouch:
         """
         __grayscale
 
-        Convert to grayscale.
+        Converts to grayscale based on the luminance in the CIE XYZ color space.
 
         Returns:
             Image: processed image.
@@ -140,10 +146,24 @@ class Retouch:
 
         rgb = np.array(self.image, dtype="float32")
 
-        rgbL = pow(rgb / 255.0, 2.2)
+        GAMMA = 2.2
+        ColorMatrix = namedtuple("ColorMatrix", ("red", "green", "blue"))
+
+        # Coefficients for luminance in CIE XYZ color space
+        CIE_XYZ = ColorMatrix(0.2126, 0.7152, 0.0722)
+
+        # Inverse Gamma Correction
+        rgbL = pow(rgb / 255.0, GAMMA)
+
+        # Extract RGB values
         r, g, b = rgbL[:, :, 0], rgbL[:, :, 1], rgbL[:, :, 2]
-        grayL = 0.299 * r + 0.587 * g + 0.114 * b  # BT.601
-        gray = pow(grayL, 1.0 / 2.2) * 255
+
+        # Convert to grayscale
+        grayL = CIE_XYZ.red * r + CIE_XYZ.green * g + CIE_XYZ.blue * b
+
+        # gamma correction
+        gray = pow(grayL, 1.0 / GAMMA) * 255
+
         self.image = Image.fromarray(gray.astype("uint8"))
 
         return self.image
