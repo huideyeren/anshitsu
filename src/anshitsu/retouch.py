@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Tuple
 
 import colorcorrect.algorithm as cca
 import numpy as np
@@ -12,6 +12,10 @@ class Retouch:
 
     Passing an image and options to the constructor will convert the specified image.
     """
+    RGB_RED_VALUE: int = 255
+    RGB_GREEN_VALUE: int = 255
+    RGB_BLUE_VALUE: int = 255
+    RGB_WHITE_COLOR: Tuple[int, int, int] = (RGB_RED_VALUE, RGB_GREEN_VALUE, RGB_BLUE_VALUE)
 
     def __init__(
         self,
@@ -188,12 +192,12 @@ class Retouch:
         """
         if self.image.mode == "RGBA":
             self.image.load()
-            background = Image.new("RGB", self.image.size, (255, 255, 255))
+            background = Image.new("RGB", self.image.size, self.RGB_WHITE_COLOR)
             background.paste(self.image, mask=self.image.split()[3])
             self.image = background
         if self.image.mode == "LA":
             self.image.load()
-            background = Image.new("L", self.image.size, (255))
+            background = Image.new("L", self.image.size, 255)
             background.paste(self.image, mask=self.image.split()[1])
             self.image = background
         return self.image

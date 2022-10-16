@@ -2,6 +2,7 @@ import datetime
 import glob
 import os
 import os.path
+import re
 from typing import Optional
 
 import fire
@@ -80,7 +81,9 @@ def process(
         except UnidentifiedImageError as e:
             raise fire.core.FireError(e)
         exif = image.getexif()
-        original_file_name = os.path.split(file)[1]
+        original_filename: str = os.path.split(file)[1]
+        extension = original_filename.split(".")[-1]
+        filename = re.sub(r"\.[^.]+$", "_", original_filename) + extension
         timestamp = now_s.strftime("%Y-%m-%d_%H-%M-%S")
         retouch = Retouch(
             image=image,
@@ -97,8 +100,8 @@ def process(
         saved_image.save(
             os.path.join(
                 return_path,
-                output_dir,
-                "{0}_converted_at_{1}.jpg".format(original_file_name, timestamp),
+                output_dir
+                "{0}_converted_at_{1}.jpg".format(filename, timestamp),
             ),
             quality=100,  # Specify 100 as the highest image quality
             subsampling=0,
