@@ -15,7 +15,7 @@ class Retouch:
     RGB_RED_VALUE: int = 255
     RGB_GREEN_VALUE: int = 255
     RGB_BLUE_VALUE: int = 255
-    RGB_WHITE_COLOR: Tuple[int] = (RGB_RED_VALUE, RGB_GREEN_VALUE, RGB_BLUE_VALUE)
+    RGB_WHITE_COLOR: Tuple[int, int, int] = (RGB_RED_VALUE, RGB_GREEN_VALUE, RGB_BLUE_VALUE)
 
     def __init__(
         self,
