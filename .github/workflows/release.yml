@@ -35,6 +35,8 @@ jobs:
     - name: PyPI Settings
       run: |
         poetry config pypi-token.pypi ${{secrets.PYPI_TOKEN}}
+        poetry config virtualenvs.path --unset
+        poetry config virtualenvs.in-project true
     - name: Build Poetry
       run: |
         git tag v${{ github.event.inputs.version }}
