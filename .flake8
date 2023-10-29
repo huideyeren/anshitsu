@@ -7,3 +7,4 @@ exclude =
     old,
     build,
     dist
+ignore = E501
