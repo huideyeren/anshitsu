@@ -101,7 +101,7 @@ def process(
             os.path.join(
                 return_path,
                 output_dir,
-                "{0}_converted_at_{1}.jpg".format(filename, timestamp),
+                "{0}_converted_at_{1}.png".format(filename, timestamp),
             ),
             quality=100,  # Specify 100 as the highest image quality
             subsampling=0,
