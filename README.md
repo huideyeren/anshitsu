@@ -10,7 +10,7 @@ A tiny digital photographic utility.
 
 ## Install
 
-Run this command in an environment where Python 3.8 or higher is installed.
+Run this command in an environment where Python 3.10 or higher is installed.
 
 We have tested it on Windows, Mac, and Ubuntu on GitHub Actions, but we have not tested it on Macs with Apple Silicon, so please use it at your own risk on Macs with Apple Silicon.
 
@@ -85,14 +85,13 @@ NOTES
     You can also use flags syntax for POSITIONAL ARGUMENTS
 ```
 
-If a directory is specified in the path, an `out` directory will be created in the specified directory, and the converted JPEG and PNG images will be stored in JPEG format.
+If a directory is specified in the path, an `out` directory will be created in the specified directory, and the converted JPEG and PNG images will be stored in PNG format.
 
-If you specify a JPEG or PNG image file as the path, an `out` directory will be created in the directory where the image is stored, and the converted image will be stored in JPEG format.
+If you specify a JPEG or PNG image file as the path, an `out` directory will be created in the directory where the image is stored, and the converted image will be stored in PNG format.
 
-Note: If you specify
-If you specify a file of any other format in the path, error handling is not available. An error will probably occur and the program will terminate abnormally.
+**Note:** If you specify a file in any other format in the path, be aware there is no error handling. The program will terminate abnormally.
 
-## Algorithm
+## Algorithms
 
 The following algorithms are available in this tool.
 
@@ -153,7 +152,7 @@ Outputs a monochrome image in RGB.
 
 Add Gaussian noise.
 
-To add noise, you need to specify floating-point numbers; a value of about 10.0 will be just right.
+To add noise, you need to specify a floating-point number; a value of about 10.0 will be just right.
 
 ## Special Thanks
 
