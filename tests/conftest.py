@@ -8,6 +8,6 @@ import pytest
 def setup():
     shutil.copytree("./tests/pic", "./tests/pic_backup")
     yield
-    os.rmdir("./tests/pic")
+    shutil.rmtree("./tests/pic")
     shutil.copytree("./tests/pic_backup", ".tests/pic")
-    os.rmdir("./tests/pic_backup")
+    shutil.rmtree("./tests/pic_backup")
