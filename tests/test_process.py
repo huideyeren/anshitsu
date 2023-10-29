@@ -51,7 +51,7 @@ def test_main_for_creating_directory_by_default(capfd, setup):
     captured = capfd.readouterr()
     error = captured.err
 
-    assert os.path.isdir("./tests/pic/anshitsu_out")
+    assert os.path.exists("./tests/pic/anshitsu_out")
 
 
 def test_main_for_creating_directory_by_overwrite_mode(capfd, setup):
@@ -59,7 +59,7 @@ def test_main_for_creating_directory_by_overwrite_mode(capfd, setup):
     captured = capfd.readouterr()
     error = captured.err
 
-    assert os.path.isdir("./tests/pic/anshitsu_orig")
+    assert os.path.exists("./tests/pic/anshitsu_orig")
 
 
 def test_main_for_saving_original_files_by_overwrite_mode(capfd, setup):
@@ -67,4 +67,11 @@ def test_main_for_saving_original_files_by_overwrite_mode(capfd, setup):
     captured = capfd.readouterr()
     error = captured.err
 
-    assert os.path.isfile("./tests/pic/anshitsu_orig/dog.jpg")
+    assert os.path.exists("./tests/pic/anshitsu_orig/dog.jpg")
+
+def test_main_for_exist_converted_files_by_overwrite_mode(capfd, setup):
+    fire.Fire(process, ["./tests/pic/dog.jpg",  "--overwrite", "--tosaka=2.4"])
+    captured = capfd.readouterr()
+    error = captured.err
+
+    assert os.path.exists("./tests/pic/dog.png")

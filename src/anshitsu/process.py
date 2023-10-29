@@ -13,15 +13,15 @@ from anshitsu.retouch import Retouch
 
 
 def process(
-    path: str,
-    colorautoadjust: bool = False,
-    colorstretch: bool = False,
-    grayscale: bool = False,
-    invert: bool = False,
-    tosaka: Optional[float] = None,
-    outputrgb: bool = False,
-    noise: Optional[float] = None,
-    overwrite: bool = False,
+        path: str,
+        colorautoadjust: bool = False,
+        colorstretch: bool = False,
+        grayscale: bool = False,
+        invert: bool = False,
+        tosaka: Optional[float] = None,
+        outputrgb: bool = False,
+        noise: Optional[float] = None,
+        overwrite: bool = False,
 ) -> str:
     """
     Process Runnner for Command Line Interface
@@ -91,16 +91,26 @@ def process(
         exif = image.getexif()
         original_filename: str = os.path.split(file)[1]
         extension = original_filename.split(".")[-1]
+        timestamp = now_s.strftime("%Y-%m-%d_%H-%M-%S")
         if overwrite is True:
+            backup_filename = original_filename
             image.save(os.path.join(
                 return_path,
                 original_dir,
-                original_filename,
-                ".",
-                extension
+                backup_filename
             ))
-        filename = re.sub(r"\.[^.]+$", "_", original_filename) + extension
-        timestamp = now_s.strftime("%Y-%m-%d_%H-%M-%S")
+            filename = os.path.join(return_path, re.sub(r"\.[^.]+$", "", original_filename) + ".png")
+            remove_file_list = [".jpg", ".JPG", ".jpeg", ".JPEG", ".PNG"]
+            list(map(lambda ext: os.path.join(return_path, re.sub(r"\.[^.]+$", "", original_filename)), remove_file_list))
+            for remove_file_name in remove_file_list:
+                if os.path.isfile(remove_file_name):
+                    os.remove(remove_file_name)
+        else:
+            filename = os.path.join(
+                return_path,
+                output_dir,
+                re.sub(r"\.[^.]+$", "_", original_filename)
+                + "_{0}_converted_at_{1}.png".format(extension, timestamp))
         retouch = Retouch(
             image=image,
             colorautoadjust=colorautoadjust,
@@ -113,12 +123,9 @@ def process(
         )
         saved_image = retouch.process()
         os.makedirs(os.path.join(return_path, output_dir), exist_ok=True)
+        print(filename)
         saved_image.save(
-            os.path.join(
-                return_path,
-                output_dir,
-                "{0}_converted_at_{1}.png".format(filename, timestamp),
-            ),
+            filename,
             quality=100,  # Specify 100 as the highest image quality
             subsampling=0,
             exif=exif,
