@@ -1,3 +1,5 @@
+import os.path
+
 import fire
 import pytest
 from anshitsu.process import process
@@ -42,3 +44,26 @@ def test_main_for_string_not_path(capfd):
     error = captured.err
 
     assert "A non-path string was passed." in error
+
+
+def test_main_for_creating_directory_by_default(capfd):
+    fire.Fire(process, ["./tests/pic/dog.jpg"])
+    captured = capfd.readouterr()
+    error = captured.err
+
+    assert os.path.isdir("./tests/pic/anshitsu_out")
+
+
+def test_main_for_creating_directory_by_overwrite_mode(capfd):
+    fire.Fire(process, ["./tests/pic/dog.jpg", "--overwrite", "--tosaka=2.4"])
+    captured = capfd.readouterr()
+    error = captured.err
+
+    assert os.path.isdir("./tests/pic/anshitsu_orig")
+
+def test_main_for_saving_original_files_by_overwrite_mode(capfd):
+    fire.Fire(process, ["./tests/pic/dog.jpg",  "--overwrite", "--tosaka=2.4"])
+    captured = capfd.readouterr()
+    error = captured.err
+
+    assert os.path.isfile("./tests/pic/anshitsu_orig/dog.jpg")

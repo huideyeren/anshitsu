@@ -14,6 +14,7 @@ from anshitsu.retouch import Retouch
 
 def process(
     path: str,
+    overwrite: bool = False,
     colorautoadjust: bool = False,
     colorstretch: bool = False,
     grayscale: bool = False,
@@ -41,6 +42,7 @@ def process(
 
     Args:
         path (str): Directory or File Path
+        overwrite (bool, optional): Overwrite original files. Defaults to False.
         colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
         colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
         grayscale (bool, optional): Convert to grayscale. Defaults to False.
@@ -60,6 +62,7 @@ def process(
     return_path = ""
     now_s = datetime.datetime.now()
     output_dir = "anshitsu_out"
+    original_dir = "anshitsu_orig"
     if os.path.isdir(path):
         for type in types:
             files_glob.extend(glob.glob(os.path.join(path, '**', type), recursive=True))
@@ -75,6 +78,8 @@ def process(
         return_path = os.path.abspath(os.path.join(path, os.pardir))
     else:
         raise fire.core.FireError("A non-path string was passed.")
+    if overwrite is True:
+        os.makedirs(os.path.join(return_path, original_dir))
     for i, file in enumerate(files_glob):
         try:
             image = Image.open(file)
@@ -83,6 +88,14 @@ def process(
         exif = image.getexif()
         original_filename: str = os.path.split(file)[1]
         extension = original_filename.split(".")[-1]
+        if overwrite is True:
+            image.save(os.path.join(
+                return_path,
+                original_dir,
+                original_filename,
+                ".",
+                extension
+            ))
         filename = re.sub(r"\.[^.]+$", "_", original_filename) + extension
         timestamp = now_s.strftime("%Y-%m-%d_%H-%M-%S")
         retouch = Retouch(
