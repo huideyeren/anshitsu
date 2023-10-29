@@ -1,7 +1,6 @@
 import fire
 import pytest
 from anshitsu.process import process
-from PIL import UnidentifiedImageError
 
 
 def test_main_for_dir(capsys):
