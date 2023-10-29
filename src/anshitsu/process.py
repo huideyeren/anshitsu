@@ -101,10 +101,12 @@ def process(
             ))
             filename = os.path.join(return_path, re.sub(r"\.[^.]+$", "", original_filename) + ".png")
             remove_file_list = [".jpg", ".JPG", ".jpeg", ".JPEG", ".PNG"]
-            list(map(lambda ext: os.path.join(return_path, re.sub(r"\.[^.]+$", "", original_filename)), remove_file_list))
-            for remove_file_name in remove_file_list:
-                if os.path.isfile(remove_file_name):
-                    os.remove(remove_file_name)
+            for remove_file in remove_file_list:
+                remove_file_name = re.sub(r"\.[^.]+$", "", original_filename) + remove_file
+                remove_file_path = os.path.join(return_path, remove_file_name)
+                print(remove_file_name)
+                if os.path.isfile(remove_file_path):
+                    os.remove(remove_file_path)
         else:
             filename = os.path.join(
                 return_path,
