@@ -1,8 +1,18 @@
 import os.path
+import os
+import shutil
 
 import fire
 import pytest
 from anshitsu.process import process
+
+
+@pytest.fixture()
+def setup():
+    shutil.copy2("./tests/pic", ".tests/pic_backup")
+    yield
+    os.rmdir("./tests/pic")
+    shutil.copy2("./tests/pic_backup", ".tests/pic")
 
 
 def test_main_for_dir(capsys):
@@ -60,6 +70,7 @@ def test_main_for_creating_directory_by_overwrite_mode(capfd):
     error = captured.err
 
     assert os.path.isdir("./tests/pic/anshitsu_orig")
+
 
 def test_main_for_saving_original_files_by_overwrite_mode(capfd):
     fire.Fire(process, ["./tests/pic/dog.jpg",  "--overwrite", "--tosaka=2.4"])
