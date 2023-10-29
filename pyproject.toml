@@ -30,6 +30,9 @@ pytest-cov = "^3.0.0"
 [tool.poetry.scripts]
 anshitsu = "anshitsu.cli:main"
 
+[tool.poetry.group.dev.dependencies]
+importlib-metadata = "^6.8.0"
+
 [tool.poetry-dynamic-versioning]
 enable = true
 style = "pep440"
