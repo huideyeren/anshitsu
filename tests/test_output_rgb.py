@@ -4,7 +4,7 @@ from anshitsu import retouch
 from PIL import Image
 
 
-def test_output_rgb_by_rgb():
+def test_output_rgb_by_rgb(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
@@ -13,7 +13,7 @@ def test_output_rgb_by_rgb():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale():
+def test_output_rgb_by_grayscale(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
@@ -22,7 +22,7 @@ def test_output_rgb_by_grayscale():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_rgba():
+def test_output_rgb_by_rgba(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
@@ -31,7 +31,7 @@ def test_output_rgb_by_rgba():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_with_alpha():
+def test_output_rgb_by_grayscale_with_alpha(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "test.png"),
     )
@@ -40,7 +40,7 @@ def test_output_rgb_by_grayscale_with_alpha():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_rgb_using_tosaka_mode():
+def test_output_rgb_by_rgb_using_tosaka_mode(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
@@ -49,7 +49,7 @@ def test_output_rgb_by_rgb_using_tosaka_mode():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_using_tosaka_mode():
+def test_output_rgb_by_grayscale_using_tosaka_mode(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
@@ -58,7 +58,7 @@ def test_output_rgb_by_grayscale_using_tosaka_mode():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_rgba_using_tosaka_mode():
+def test_output_rgb_by_rgba_using_tosaka_mode(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
@@ -67,7 +67,7 @@ def test_output_rgb_by_rgba_using_tosaka_mode():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_with_alpha_using_tosaka_mode():
+def test_output_rgb_by_grayscale_with_alpha_using_tosaka_mode(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "test.png"),
     )
@@ -76,7 +76,7 @@ def test_output_rgb_by_grayscale_with_alpha_using_tosaka_mode():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_rgb_with_none_grayscale_option():
+def test_output_rgb_by_rgb_with_none_grayscale_option(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
@@ -85,7 +85,7 @@ def test_output_rgb_by_rgb_with_none_grayscale_option():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_with_none_grayscale_option():
+def test_output_rgb_by_grayscale_with_none_grayscale_option(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
@@ -94,7 +94,7 @@ def test_output_rgb_by_grayscale_with_none_grayscale_option():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_rgba_with_none_grayscale_option():
+def test_output_rgb_by_rgba_with_none_grayscale_option(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
@@ -103,7 +103,7 @@ def test_output_rgb_by_rgba_with_none_grayscale_option():
     assert gray.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_with_alpha_with_none_grayscale_option():
+def test_output_rgb_by_grayscale_with_alpha_with_none_grayscale_option(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "test.png"),
     )

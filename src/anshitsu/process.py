@@ -13,14 +13,15 @@ from anshitsu.retouch import Retouch
 
 
 def process(
-    path: str,
-    colorautoadjust: bool = False,
-    colorstretch: bool = False,
-    grayscale: bool = False,
-    invert: bool = False,
-    tosaka: Optional[float] = None,
-    outputrgb: bool = False,
-    noise: Optional[float] = None,
+        path: str,
+        colorautoadjust: bool = False,
+        colorstretch: bool = False,
+        grayscale: bool = False,
+        invert: bool = False,
+        tosaka: Optional[float] = None,
+        outputrgb: bool = False,
+        noise: Optional[float] = None,
+        overwrite: bool = False,
 ) -> str:
     """
     Process Runnner for Command Line Interface
@@ -41,6 +42,7 @@ def process(
 
     Args:
         path (str): Directory or File Path
+        overwrite (bool, optional): Overwrite original files. Defaults to False.
         colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
         colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
         grayscale (bool, optional): Convert to grayscale. Defaults to False.
@@ -60,6 +62,7 @@ def process(
     return_path = ""
     now_s = datetime.datetime.now()
     output_dir = "anshitsu_out"
+    original_dir = "anshitsu_orig"
     if os.path.isdir(path):
         for type in types:
             files_glob.extend(glob.glob(os.path.join(path, '**', type), recursive=True))
@@ -75,6 +78,11 @@ def process(
         return_path = os.path.abspath(os.path.join(path, os.pardir))
     else:
         raise fire.core.FireError("A non-path string was passed.")
+    if overwrite is True:
+        os.makedirs(os.path.join(return_path, original_dir))
+        print("overwrite is True")
+    else:
+        print("overwrite is False")
     for i, file in enumerate(files_glob):
         try:
             image = Image.open(file)
@@ -83,8 +91,28 @@ def process(
         exif = image.getexif()
         original_filename: str = os.path.split(file)[1]
         extension = original_filename.split(".")[-1]
-        filename = re.sub(r"\.[^.]+$", "_", original_filename) + extension
         timestamp = now_s.strftime("%Y-%m-%d_%H-%M-%S")
+        if overwrite is True:
+            backup_filename = original_filename
+            image.save(os.path.join(
+                return_path,
+                original_dir,
+                backup_filename
+            ))
+            filename = os.path.join(return_path, re.sub(r"\.[^.]+$", "", original_filename) + ".png")
+            remove_file_list = [".jpg", ".JPG", ".jpeg", ".JPEG", ".PNG"]
+            for remove_file in remove_file_list:
+                remove_file_name = re.sub(r"\.[^.]+$", "", original_filename) + remove_file
+                remove_file_path = os.path.join(return_path, remove_file_name)
+                print(remove_file_name)
+                if os.path.isfile(remove_file_path):
+                    os.remove(remove_file_path)
+        else:
+            filename = os.path.join(
+                return_path,
+                output_dir,
+                re.sub(r"\.[^.]+$", "_", original_filename)
+                + "_{0}_converted_at_{1}.png".format(extension, timestamp))
         retouch = Retouch(
             image=image,
             colorautoadjust=colorautoadjust,
@@ -97,12 +125,9 @@ def process(
         )
         saved_image = retouch.process()
         os.makedirs(os.path.join(return_path, output_dir), exist_ok=True)
+        print(filename)
         saved_image.save(
-            os.path.join(
-                return_path,
-                output_dir,
-                "{0}_converted_at_{1}.png".format(filename, timestamp),
-            ),
+            filename,
             quality=100,  # Specify 100 as the highest image quality
             subsampling=0,
             exif=exif,

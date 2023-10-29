@@ -4,7 +4,7 @@ from anshitsu import retouch
 from PIL import Image
 
 
-def test_colorautoadjust_by_rgb():
+def test_colorautoadjust_by_rgb(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
@@ -13,7 +13,7 @@ def test_colorautoadjust_by_rgb():
     assert gray.mode == "RGB"
 
 
-def test_colorautoadjust_by_grayscale():
+def test_colorautoadjust_by_grayscale(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
@@ -22,7 +22,7 @@ def test_colorautoadjust_by_grayscale():
     assert gray.mode == "L"
 
 
-def test_colorautoadjust_by_rgba():
+def test_colorautoadjust_by_rgba(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
@@ -31,7 +31,7 @@ def test_colorautoadjust_by_rgba():
     assert gray.mode == "RGB"
 
 
-def test_colorautoadjust_by_grayscale_with_alpha():
+def test_colorautoadjust_by_grayscale_with_alpha(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "test.png"),
     )
