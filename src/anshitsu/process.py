@@ -14,7 +14,6 @@ from anshitsu.retouch import Retouch
 
 def process(
     path: str,
-    overwrite: bool = False,
     colorautoadjust: bool = False,
     colorstretch: bool = False,
     grayscale: bool = False,
@@ -22,6 +21,7 @@ def process(
     tosaka: Optional[float] = None,
     outputrgb: bool = False,
     noise: Optional[float] = None,
+    overwrite: bool = False,
 ) -> str:
     """
     Process Runnner for Command Line Interface
@@ -80,6 +80,9 @@ def process(
         raise fire.core.FireError("A non-path string was passed.")
     if overwrite is True:
         os.makedirs(os.path.join(return_path, original_dir))
+        print("overwrite is True")
+    else:
+        print("overwrite is False")
     for i, file in enumerate(files_glob):
         try:
             image = Image.open(file)
