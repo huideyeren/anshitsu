@@ -80,9 +80,6 @@ def process(
         raise fire.core.FireError("A non-path string was passed.")
     if overwrite is True:
         os.makedirs(os.path.join(return_path, original_dir))
-        print("overwrite is True")
-    else:
-        print("overwrite is False")
     for i, file in enumerate(files_glob):
         try:
             image = Image.open(file)
@@ -104,7 +101,6 @@ def process(
             for remove_file in remove_file_list:
                 remove_file_name = re.sub(r"\.[^.]+$", "", original_filename) + remove_file
                 remove_file_path = os.path.join(return_path, remove_file_name)
-                print(remove_file_name)
                 if os.path.isfile(remove_file_path):
                     os.remove(remove_file_path)
         else:
@@ -125,7 +121,6 @@ def process(
         )
         saved_image = retouch.process()
         os.makedirs(os.path.join(return_path, output_dir), exist_ok=True)
-        print(filename)
         saved_image.save(
             filename,
             quality=100,  # Specify 100 as the highest image quality
