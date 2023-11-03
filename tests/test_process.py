@@ -70,16 +70,26 @@ def test_main_for_saving_original_files_by_overwrite_mode(capfd, setup):
 
     assert os.path.exists("./tests/pic/anshitsu_orig/dog.jpg")
 
+
 def test_main_for_exist_converted_files_by_overwrite_mode(capfd, setup):
     fire.Fire(process, ["./tests/pic/dog.jpg",  "--overwrite", "--tosaka=2.4"])
     captured = capfd.readouterr()
     error = captured.err
 
     assert os.path.exists("./tests/pic/dog.png")
-    
-def test_version(capfd, setup):
+
+
+def test_main_for_show_version(capfd, setup):
     fire.Fire(process, ["--version"])
     captured = capfd.readouterr()
     result = captured.out
-    
+
     assert "anshitsu {0}".format(version) in result
+
+
+def test_main_for_no_path(capfd, setup):
+    fire.Fire(process)
+    captured = capfd.readouterr()
+    error = captured.err
+
+    assert "No path specified!" in error

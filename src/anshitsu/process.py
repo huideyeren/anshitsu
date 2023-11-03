@@ -14,7 +14,7 @@ from anshitsu.__version__ import version as __version__
 
 
 def process(
-        path: str,
+        path: Optional[str],
         colorautoadjust: bool = False,
         colorstretch: bool = False,
         grayscale: bool = False,
@@ -62,6 +62,8 @@ def process(
     """
     if version:
         print("anshitsu version {}".format(__version__))
+    if path is None:
+        raise ValueError("No path specified!")
     types = ("*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.png", "*.PNG")
     files_glob = []
     return_path = ""
