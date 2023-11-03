@@ -14,7 +14,7 @@ from anshitsu.__version__ import version as __version__
 
 
 def process(
-        path: Optional[str],
+        path: Optional[str] = None,
         colorautoadjust: bool = False,
         colorstretch: bool = False,
         grayscale: bool = False,
@@ -43,7 +43,7 @@ def process(
     numbers around 2.4 will make it look right.
 
     Args:
-        path (Optional[str], optional): Directory or File Path
+        path (Optional[str], optional): Directory or File Path. Defaults to None.
         overwrite (bool, optional): Overwrite original files. Defaults to False.
         colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
         colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
@@ -63,7 +63,7 @@ def process(
     if version:
         return "anshitsu version {}".format(__version__)
     if path is None:
-        raise ValueError("No path specified!")
+        raise fire.core.FireError("No path specified!")
     types = ("*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.png", "*.PNG")
     files_glob = []
     return_path = ""
