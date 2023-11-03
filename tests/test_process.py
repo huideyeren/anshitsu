@@ -88,7 +88,8 @@ def test_main_for_show_version(capfd, setup):
 
 
 def test_main_for_no_path(capfd, setup):
-    fire.Fire(process, [])
+    with pytest.raises(SystemExit):
+        fire.Fire(process, [])
     captured = capfd.readouterr()
     error = captured.err
 
