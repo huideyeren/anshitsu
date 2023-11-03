@@ -84,11 +84,12 @@ def test_main_for_show_version(capfd, setup):
     captured = capfd.readouterr()
     result = captured.out
 
-    assert "anshitsu {0}".format(version) in result
+    assert "Anshitsu version {0}".format(version) in result
 
 
 def test_main_for_no_path(capfd, setup):
-    fire.Fire(process)
+    with pytest.raises(SystemExit):
+        fire.Fire(process, [])
     captured = capfd.readouterr()
     error = captured.err
 
