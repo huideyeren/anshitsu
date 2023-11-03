@@ -43,7 +43,7 @@ def process(
     numbers around 2.4 will make it look right.
 
     Args:
-        path (str): Directory or File Path
+        path (Optional[str], optional): Directory or File Path
         overwrite (bool, optional): Overwrite original files. Defaults to False.
         colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
         colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
