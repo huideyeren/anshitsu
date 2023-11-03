@@ -3,6 +3,7 @@ import os.path
 import fire
 import pytest
 from anshitsu.process import process
+from anshitsu.__version__ import version
 
 
 def test_main_for_dir(capsys, setup):
@@ -75,3 +76,10 @@ def test_main_for_exist_converted_files_by_overwrite_mode(capfd, setup):
     error = captured.err
 
     assert os.path.exists("./tests/pic/dog.png")
+    
+def test_version(capfd, setup):
+    fire.Fire(process, ["--version"])
+    captured = capfd.readouterr()
+    result = captured.out
+    
+    assert "anshitsu {0}".format(version) in result

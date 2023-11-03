@@ -10,6 +10,7 @@ import fire.core
 from PIL import Image, UnidentifiedImageError
 
 from anshitsu.retouch import Retouch
+from anshitsu.__version__ import version as __version__
 
 
 def process(
@@ -22,6 +23,7 @@ def process(
         outputrgb: bool = False,
         noise: Optional[float] = None,
         overwrite: bool = False,
+        version: bool = False,
 ) -> str:
     """
     Process Runnner for Command Line Interface
@@ -50,6 +52,7 @@ def process(
         tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
         outputrgb (bool, optional): Outputs a monochrome image in RGB. Defaults to False.
         noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
+        version (bool, optional): Show version. Defaults to False.
 
     Raises:
         fire.core.FireError: Error that occurs when the specified string is not a path.
@@ -57,6 +60,8 @@ def process(
     Returns:
         str: Message.
     """
+    if version:
+        print("anshitsu version {}".format(__version__))
     types = ("*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.png", "*.PNG")
     files_glob = []
     return_path = ""
