@@ -61,7 +61,7 @@ def process(
         str: Message.
     """
     if version:
-        print("anshitsu version {}".format(__version__))
+        return "anshitsu version {}".format(__version__)
     if path is None:
         raise ValueError("No path specified!")
     types = ("*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.png", "*.PNG")
