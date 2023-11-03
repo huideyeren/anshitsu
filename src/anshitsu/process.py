@@ -61,7 +61,7 @@ def process(
         str: Message.
     """
     if version:
-        return "anshitsu version {}".format(__version__)
+        return "Anshitsu version {}".format(__version__)
     if path is None:
         raise fire.core.FireError("No path specified!")
     types = ("*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.png", "*.PNG")
