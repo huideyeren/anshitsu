@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "anshitsu"
-version = "1.5.1"  # using poetry-dynamic-versioning
+version = "1.6.0"  # using poetry-dynamic-versioning
 description = "A tiny digital photographic utility."
 readme = "README.md"
 authors = ["Iosif Takakura <iosif@huideyeren.info>"]
@@ -15,29 +15,29 @@ style = "pep440"
 
 [tool.poetry.dependencies]
 python = "<3.13,>=3.10"
-numpy = "^1.26.0"
-Pillow = "^10.1.0"
-colorcorrect = "^0.9.1"
-fire = "^0.5.0"
+numpy = "*"
+Pillow = "*"
+colorcorrect = "*"
+fire = "*"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2"
-flake8 = "^6.1.0"
-mypy = "^0.981"
-black = "^23.10"
-isort = "^5.12.0"
-pyproject-flake8 = "^0.0.1a4"
-pytest-randomly = "^3.15.0"
-tox = "^4.11.3"
-pytest-cov = "^4.1.0"
+pytest = "*"
+flake8 = "*"
+mypy = "*"
+black = "*"
+isort = "*"
+pyproject-flake8 = "*"
+pytest-randomly = "*"
+tox = "*"
+pytest-cov = "*"
 
 [tool.poetry.scripts]
-anshitsu = "anshitsu.cli:main"
+anshitsu = "anshitsu.main:main"
 
 [tool.poetry.group.dev.dependencies]
-importlib-metadata = "^6.8.0"
-poetry-dynamic-versioning = "^1.1.1"
-setuptools = "^68.2.2"
+importlib-metadata = "*"
+poetry-dynamic-versioning = "*"
+setuptools = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]

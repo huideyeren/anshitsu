@@ -5,6 +5,7 @@ import subprocess
 
 import pytest
 
+
 @pytest.fixture()
 def setup():
     shutil.copytree("./tests/pic", "./tests/pic_backup")

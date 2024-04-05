@@ -7,9 +7,9 @@ from colorcorrect.util import from_pil, to_pil
 from PIL import Image, ImageChops, ImageEnhance, ImageOps
 
 
-class Retouch:
+class Processor:
     """
-    Perform retouching.
+    Perform processing.
 
     Passing an image and options to the constructor will convert the specified image.
     """
