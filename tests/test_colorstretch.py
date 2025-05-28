@@ -1,6 +1,6 @@
 import os
 
-from anshitsu.processor import Processor
+from anshitsu.process.processor import Processor
 from PIL import Image
 
 

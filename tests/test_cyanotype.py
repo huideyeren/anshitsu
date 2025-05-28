@@ -4,97 +4,97 @@ from anshitsu.process.processor import Processor
 from PIL import Image
 
 
-def test_output_rgb_by_rgb(setup):
+def test_cyanotype_by_rgb(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
-    image = Processor(image=image, grayscale=True, outputrgb=True).process()
+    image = Processor(image=image, grayscale=True, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale(setup):
+def test_cyanotype_by_grayscale(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
-    image = Processor(image=image, grayscale=True, outputrgb=True).process()
+    image = Processor(image=image, grayscale=True, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_rgba(setup):
+def test_cyanotype_by_rgba(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
-    image = Processor(image=image, grayscale=True, outputrgb=True).process()
+    image = Processor(image=image, grayscale=True, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_with_alpha(setup):
+def test_cyanotype_by_grayscale_with_alpha(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "test.png"),
     )
-    image = Processor(image=image, grayscale=True, outputrgb=True).process()
+    image = Processor(image=image, grayscale=True, cyanotype=True).process()
     assert image.mode == "RGB"
-
-
-def test_output_rgb_by_rgb_using_tosaka_mode(setup):
+    
+def test_cyanotype_by_rgb_using_tosaka_mode(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
-    image = Processor(image=image, tosaka=2.4, outputrgb=True).process()
+    image = Processor(image=image, tosaka=2.4, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_using_tosaka_mode(setup):
+def test_cyanotype_by_grayscale_using_tosaka_mode(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
-    image = Processor(image=image, tosaka=2.4, outputrgb=True).process()
+    image = Processor(image=image, tosaka=2.4, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_rgba_using_tosaka_mode(setup):
+def test_cyanotype_by_rgba_using_tosaka_mode(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
-    image = Processor(image=image, tosaka=2.4, outputrgb=True).process()
+    image = Processor(image=image, tosaka=2.4, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_with_alpha_using_tosaka_mode(setup):
+def test_cyanotype_by_grayscale_with_alpha_using_tosaka_mode(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "test.png"),
     )
-    image = Processor(image=image, tosaka=2.4, outputrgb=True).process()
+    image = Processor(image=image, tosaka=2.4, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_rgb_with_none_grayscale_option(setup):
+def test_cyanotype_by_rgb_with_none_grayscale_option(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
-    image = Processor(image=image, outputrgb=True).process()
+    image = Processor(image=image, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_with_none_grayscale_option(setup):
+def test_cyanotype_by_grayscale_with_none_grayscale_option(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
-    image = Processor(image=image, outputrgb=True).process()
+    image = Processor(image=image, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_rgba_with_none_grayscale_option(setup):
+def test_cyanotype_by_rgba_with_none_grayscale_option(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
-    image = Processor(image=image, outputrgb=True).process()
+    image = Processor(image=image, cyanotype=True).process()
     assert image.mode == "RGB"
 
 
-def test_output_rgb_by_grayscale_with_alpha_with_none_grayscale_option(setup):
+def test_cyanotype_by_grayscale_with_alpha_with_none_grayscale_option(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "test.png"),
     )
-    image = Processor(image=image, outputrgb=True).process()
+    image = Processor(image=image, cyanotype=True).process()
     assert image.mode == "RGB"
+

@@ -9,7 +9,7 @@ import fire
 import fire.core
 from PIL import Image, UnidentifiedImageError
 
-from anshitsu.processor import Processor
+from anshitsu.process.processor import Processor
 from anshitsu.__version__ import version as __version__
 
 
@@ -19,11 +19,19 @@ def cli(
         colorstretch: bool = False,
         grayscale: bool = False,
         invert: bool = False,
+        color: Optional[float] = None,
+        brightness: Optional[float] = None,
+        sharpness: Optional[float] = None,
+        contrast: Optional[float] = None,
         tosaka: Optional[float] = None,
         outputrgb: bool = False,
+        sepia: bool = False,
+        cyanotype: bool = False,
         noise: Optional[float] = None,
         overwrite: bool = False,
         version: bool = False,
+        line_drawing: bool = False,
+        posterize: Optional[int] = None,
 ) -> str:
     """
     Process Runnner for Command Line Interface
@@ -49,9 +57,16 @@ def cli(
         colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
         grayscale (bool, optional): Convert to grayscale. Defaults to False.
         invert (bool, optional): Invert color. Defaults to False.
-        tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
+        color (Optional[float], optional): Fix color balance. Defaults to None.
+        brightness (Optional[float], optional): Fix brightness. Defaults to None.
+        sharpness (Optional[float], optional): Fix sharpness. Defaults to None.
+        contrast (Optional[float], optional): Fix contrast. Defaults to None.
+        tosaka (Optional[float], optional): Convert to grayscale with fix contrast. Defaults to None.
         outputrgb (bool, optional): Outputs a monochrome image in RGB. Defaults to False.
+        cyanotype (bool, optional): Convert to RGB like cyanotype. Defaults to False.
+        sepia (bool, optional): Convert to RGB colored by sepia. Defaults to False.
         noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
+        line_drawing (bool, optional): Convert to like line drawing. Defaults to False.
         version (bool, optional): Show version. Defaults to False.
 
     Raises:
@@ -121,10 +136,18 @@ def cli(
             colorautoadjust=colorautoadjust,
             colorstretch=colorstretch,
             grayscale=grayscale,
+            color=color,
+            contrast=contrast,
+            brightness=brightness,
+            sharpness=sharpness,
             invert=invert,
             tosaka=tosaka,
             outputrgb=outputrgb,
+            cyanotype=cyanotype,
+            sepia=sepia,
             noise=noise,
+            line_drawing=line_drawing,
+            posterize=posterize,
         )
         saved_image = psr.process()
         os.makedirs(os.path.join(return_path, output_dir), exist_ok=True)
