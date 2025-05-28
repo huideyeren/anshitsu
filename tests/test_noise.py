@@ -1,7 +1,8 @@
 import os
 
-from anshitsu.process.processor import Processor
 from PIL import Image
+
+from anshitsu.process.processor import Processor
 
 
 def test_noise_by_rgb(setup):

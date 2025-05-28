@@ -1,5 +1,6 @@
 from PIL import Image
 
+
 def sepia(image: Image) -> Image:
     """
     sepia
@@ -11,10 +12,10 @@ def sepia(image: Image) -> Image:
     """
     if image.mode == "L":
         image = Image.merge("RGB",
-            (
-                image.point(lambda x: x * 240 / 255),
-                image.point(lambda x: x * 200 / 255),
-                image.point(lambda x: x * 145 / 255)
-            )
-        )
+                            (
+                                image.point(lambda x: x * 240 / 255),
+                                image.point(lambda x: x * 200 / 255),
+                                image.point(lambda x: x * 145 / 255)
+                            )
+                            )
     return image

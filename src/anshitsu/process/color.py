@@ -1,5 +1,6 @@
 from PIL import Image, ImageEnhance
 
+
 def color(image: Image, color: float) -> Image:
     """
     contrast

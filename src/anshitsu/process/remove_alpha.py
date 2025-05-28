@@ -2,6 +2,7 @@ from typing import Tuple
 
 from PIL import Image
 
+
 def remove_alpha(image: Image) -> Image:
     """
     __rgba_convert

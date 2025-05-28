@@ -1,7 +1,9 @@
 import os
 
-from anshitsu.process.processor import Processor
 from PIL import Image
+
+from anshitsu.process.processor import Processor
+
 
 def test_sharpness_by_rgb(setup):
     image = Image.open(

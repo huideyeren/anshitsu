@@ -1,7 +1,8 @@
 import os
 
-from anshitsu.process.processor import Processor
 from PIL import Image
+
+from anshitsu.process.processor import Processor
 
 
 def test_sepia_by_rgb(setup):
@@ -98,4 +99,3 @@ def test_sepia_by_grayscale_with_alpha_with_none_grayscale_option(setup):
     )
     image = Processor(image=image, sepia=True).process()
     assert image.mode == "RGB"
-

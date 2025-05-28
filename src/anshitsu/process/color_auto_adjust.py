@@ -1,5 +1,5 @@
-from PIL import Image
 import colorcorrect.algorithm as cca
+from PIL import Image
 from colorcorrect.util import to_pil, from_pil
 
 

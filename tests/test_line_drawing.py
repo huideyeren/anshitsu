@@ -1,7 +1,8 @@
 import os
 
-from anshitsu.process.processor import Processor
 from PIL import Image
+
+from anshitsu.process.processor import Processor
 
 
 def test_line_drawing_by_rgb(setup):
@@ -34,6 +35,7 @@ def test_line_drawing_by_grayscale_with_alpha(setup):
     )
     image = Processor(image=image, line_drawing=True).process()
     assert image.mode == "L"
+
 
 def test_inverted_line_drawing_by_rgb(setup):
     image = Image.open(

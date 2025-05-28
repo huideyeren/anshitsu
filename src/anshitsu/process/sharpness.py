@@ -1,5 +1,6 @@
 from PIL import Image, ImageEnhance
 
+
 def sharpness(image: Image, sharpness: float) -> Image:
     """
     sharpness

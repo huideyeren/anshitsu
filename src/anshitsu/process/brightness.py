@@ -1,5 +1,6 @@
 from PIL import Image, ImageEnhance
 
+
 def brightness(image: Image, brightness: float) -> Image:
     """
     brightness

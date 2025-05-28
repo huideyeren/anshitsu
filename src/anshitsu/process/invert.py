@@ -1,5 +1,6 @@
 from PIL import Image, ImageOps
 
+
 def invert(image: Image) -> Image:
     """
     invert

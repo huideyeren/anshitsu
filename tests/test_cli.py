@@ -2,8 +2,9 @@ import os.path
 
 import fire
 import pytest
-from anshitsu.cli import cli
+
 from anshitsu.__version__ import version
+from anshitsu.cli import cli
 
 
 def test_main_for_dir(capsys, setup):
@@ -64,7 +65,7 @@ def test_main_for_creating_directory_by_overwrite_mode(capfd, setup):
 
 
 def test_main_for_saving_original_files_by_overwrite_mode(capfd, setup):
-    fire.Fire(cli, ["./tests/pic/dog.jpg",  "--overwrite", "--tosaka=2.4"])
+    fire.Fire(cli, ["./tests/pic/dog.jpg", "--overwrite", "--tosaka=2.4"])
     captured = capfd.readouterr()
     error = captured.err
 
@@ -72,7 +73,7 @@ def test_main_for_saving_original_files_by_overwrite_mode(capfd, setup):
 
 
 def test_main_for_exist_converted_files_by_overwrite_mode(capfd, setup):
-    fire.Fire(cli, ["./tests/pic/dog.jpg",  "--overwrite", "--tosaka=2.4"])
+    fire.Fire(cli, ["./tests/pic/dog.jpg", "--overwrite", "--tosaka=2.4"])
     captured = capfd.readouterr()
     error = captured.err
 

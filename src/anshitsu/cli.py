@@ -9,8 +9,8 @@ import fire
 import fire.core
 from PIL import Image, UnidentifiedImageError
 
-from anshitsu.process.processor import Processor
 from anshitsu.__version__ import version as __version__
+from anshitsu.process.processor import Processor
 
 
 def cli(

@@ -1,7 +1,8 @@
 import os
 
-from anshitsu.process.processor import Processor
 from PIL import Image
+
+from anshitsu.process.processor import Processor
 
 
 def test_cyanotype_by_rgb(setup):
@@ -34,7 +35,8 @@ def test_cyanotype_by_grayscale_with_alpha(setup):
     )
     image = Processor(image=image, grayscale=True, cyanotype=True).process()
     assert image.mode == "RGB"
-    
+
+
 def test_cyanotype_by_rgb_using_tosaka_mode(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
@@ -97,4 +99,3 @@ def test_cyanotype_by_grayscale_with_alpha_with_none_grayscale_option(setup):
     )
     image = Processor(image=image, cyanotype=True).process()
     assert image.mode == "RGB"
-

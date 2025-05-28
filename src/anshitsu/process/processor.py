@@ -1,21 +1,22 @@
 from typing import Optional, Tuple
 
 from PIL import Image
+
+from anshitsu.process.brightness import brightness
+from anshitsu.process.color import color
 from anshitsu.process.color_auto_adjust import color_auto_adjust
 from anshitsu.process.color_stretch import color_stretch
-from anshitsu.process.noise import noise
+from anshitsu.process.contrast import contrast
+from anshitsu.process.cyanotype import cyanotype
 from anshitsu.process.grayscale import grayscale
 from anshitsu.process.invert import invert
-from anshitsu.process.remove_alpha import remove_alpha
-from anshitsu.process.contrast import contrast
-from anshitsu.process.output_rgb import output_rgb
-from anshitsu.process.color import color
-from anshitsu.process.brightness import brightness
-from anshitsu.process.sharpness import sharpness
-from anshitsu.process.sepia import sepia
-from anshitsu.process.cyanotype import cyanotype
 from anshitsu.process.line_drawing import line_drawing
+from anshitsu.process.noise import noise
+from anshitsu.process.output_rgb import output_rgb
 from anshitsu.process.posterize import posterize
+from anshitsu.process.remove_alpha import remove_alpha
+from anshitsu.process.sepia import sepia
+from anshitsu.process.sharpness import sharpness
 
 
 class Processor:
@@ -35,23 +36,23 @@ class Processor:
     )
 
     def __init__(
-        self,
-        image: Image,
-        colorautoadjust: bool = False,
-        colorstretch: bool = False,
-        grayscale: bool = False,
-        line_drawing: bool = False,
-        invert: bool = False,
-        tosaka: Optional[float] = None,
-        outputrgb: bool = False,
-        noise: Optional[float] = None,
-        color: Optional[float] = None,
-        brightness: Optional[float] = None,
-        sharpness: Optional[float] = None,
-        contrast: Optional[float] = None,
-        sepia: bool = False,
-        cyanotype: bool = False,
-        posterize: Optional[int] = None,
+            self,
+            image: Image,
+            colorautoadjust: bool = False,
+            colorstretch: bool = False,
+            grayscale: bool = False,
+            line_drawing: bool = False,
+            invert: bool = False,
+            tosaka: Optional[float] = None,
+            outputrgb: bool = False,
+            noise: Optional[float] = None,
+            color: Optional[float] = None,
+            brightness: Optional[float] = None,
+            sharpness: Optional[float] = None,
+            contrast: Optional[float] = None,
+            sepia: bool = False,
+            cyanotype: bool = False,
+            posterize: Optional[int] = None,
     ) -> None:
         """
         __init__ constructor.
@@ -131,7 +132,6 @@ class Processor:
             self.image = cyanotype(self.image)
 
         return self.image
-
 
     def __output_rgb(self) -> Image:
         """

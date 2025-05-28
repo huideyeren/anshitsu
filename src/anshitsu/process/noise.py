@@ -1,5 +1,6 @@
 from PIL import Image, ImageChops
 
+
 def noise(image: Image, noise: float) -> Image:
     """
     noise
