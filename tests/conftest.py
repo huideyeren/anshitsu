@@ -1,9 +1,7 @@
-import os.path
-import os
 import shutil
-import subprocess
 
 import pytest
+
 
 @pytest.fixture()
 def setup():

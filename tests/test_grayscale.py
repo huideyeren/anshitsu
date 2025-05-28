@@ -1,40 +1,37 @@
 import os
 
-from anshitsu import retouch
 from PIL import Image
+
+from anshitsu.process.processor import Processor
 
 
 def test_grayscale_by_rgb(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
-    rt = retouch.Retouch(image=image, grayscale=True)
-    gray = rt.process()
-    assert gray.mode == "L"
+    image = Processor(image=image, grayscale=True).process()
+    assert image.mode == "L"
 
 
 def test_grayscale_by_grayscale(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
-    rt = retouch.Retouch(image=image, grayscale=True)
-    gray = rt.process()
-    assert gray.mode == "L"
+    image = Processor(image=image, grayscale=True).process()
+    assert image.mode == "L"
 
 
 def test_grayscale_by_rgba(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
-    rt = retouch.Retouch(image=image, grayscale=True)
-    gray = rt.process()
-    assert gray.mode == "L"
+    image = Processor(image=image, grayscale=True).process()
+    assert image.mode == "L"
 
 
 def test_grayscale_by_grayscale_with_alpha(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "test.png"),
     )
-    rt = retouch.Retouch(image=image, grayscale=True)
-    gray = rt.process()
-    assert gray.mode == "L"
+    image = Processor(image=image, grayscale=True).process()
+    assert image.mode == "L"
