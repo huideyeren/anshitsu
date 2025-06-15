@@ -13,9 +13,9 @@ def sepia(image: Image) -> Image:
     if image.mode == "L":
         image = Image.merge("RGB",
                             (
-                                image.point(lambda x: x * 240 / 255),
-                                image.point(lambda x: x * 200 / 255),
-                                image.point(lambda x: x * 145 / 255)
+                                image.point(lambda x: x * 247 / 255),
+                                image.point(lambda x: x * 225 / 255),
+                                image.point(lambda x: x * 194 / 255)
                             )
                             )
     return image
