@@ -14,24 +14,25 @@ from anshitsu.process.processor import Processor
 
 
 def cli(
-        path: Optional[str] = None,
-        colorautoadjust: bool = False,
-        colorstretch: bool = False,
-        grayscale: bool = False,
-        invert: bool = False,
-        color: Optional[float] = None,
-        brightness: Optional[float] = None,
-        sharpness: Optional[float] = None,
-        contrast: Optional[float] = None,
-        tosaka: Optional[float] = None,
-        outputrgb: bool = False,
-        sepia: bool = False,
-        cyanotype: bool = False,
-        noise: Optional[float] = None,
-        overwrite: bool = False,
-        version: bool = False,
-        line_drawing: bool = False,
-        posterize: Optional[int] = None,
+    path: Optional[str] = None,
+    keep_alpha: bool = False,
+    colorautoadjust: bool = False,
+    colorstretch: bool = False,
+    grayscale: bool = False,
+    invert: bool = False,
+    color: Optional[float] = None,
+    brightness: Optional[float] = None,
+    sharpness: Optional[float] = None,
+    contrast: Optional[float] = None,
+    tosaka: Optional[float] = None,
+    outputrgb: bool = False,
+    sepia: bool = False,
+    cyanotype: bool = False,
+    noise: Optional[float] = None,
+    overwrite: bool = False,
+    version: bool = False,
+    line_drawing: bool = False,
+    posterize: Optional[int] = None,
 ) -> str:
     """
     Process Runnner for Command Line Interface
@@ -87,7 +88,7 @@ def cli(
     original_dir = "anshitsu_orig"
     if os.path.isdir(path):
         for type in types:
-            files_glob.extend(glob.glob(os.path.join(path, '**', type), recursive=True))
+            files_glob.extend(glob.glob(os.path.join(path, "**", type), recursive=True))
         files_glob = [file for file in files_glob if not file.__contains__(output_dir)]
         return_path = path
 
@@ -113,15 +114,15 @@ def cli(
         timestamp = now_s.strftime("%Y-%m-%d_%H-%M-%S")
         if overwrite is True:
             backup_filename = original_filename
-            image.save(os.path.join(
-                return_path,
-                original_dir,
-                backup_filename
-            ))
-            filename = os.path.join(return_path, re.sub(r"\.[^.]+$", "", original_filename) + ".png")
+            image.save(os.path.join(return_path, original_dir, backup_filename))
+            filename = os.path.join(
+                return_path, re.sub(r"\.[^.]+$", "", original_filename) + ".png"
+            )
             remove_file_list = [".jpg", ".JPG", ".jpeg", ".JPEG", ".PNG"]
             for remove_file in remove_file_list:
-                remove_file_name = re.sub(r"\.[^.]+$", "", original_filename) + remove_file
+                remove_file_name = (
+                    re.sub(r"\.[^.]+$", "", original_filename) + remove_file
+                )
                 remove_file_path = os.path.join(return_path, remove_file_name)
                 if os.path.isfile(remove_file_path):
                     os.remove(remove_file_path)
@@ -130,9 +131,11 @@ def cli(
                 return_path,
                 output_dir,
                 re.sub(r"\.[^.]+$", "_", original_filename)
-                + "_{0}_converted_at_{1}.png".format(extension, timestamp))
+                + "_{0}_converted_at_{1}.png".format(extension, timestamp),
+            )
         psr = Processor(
             image=image,
+            keep_alpha=keep_alpha,
             colorautoadjust=colorautoadjust,
             colorstretch=colorstretch,
             grayscale=grayscale,

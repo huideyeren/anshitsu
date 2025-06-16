@@ -11,11 +11,12 @@ def sepia(image: Image) -> Image:
         Image: processed image.
     """
     if image.mode == "L":
-        image = Image.merge("RGB",
-                            (
-                                image.point(lambda x: x * 247 / 255),
-                                image.point(lambda x: x * 225 / 255),
-                                image.point(lambda x: x * 194 / 255)
-                            )
-                            )
+        image = Image.merge(
+            "RGB",
+            (
+                image.point(lambda x: x * 247 / 255),
+                image.point(lambda x: x * 225 / 255),
+                image.point(lambda x: x * 194 / 255),
+            ),
+        )
     return image
