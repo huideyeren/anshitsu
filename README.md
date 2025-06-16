@@ -23,13 +23,142 @@ pip install anshitsu
 It is as described in the following help.
 
 ``` shell
-INFO: Showing help with the command 'anshitsu -- --help'.
+
+
+
+
+
+
+
+
+
+
+
 
 NAME
-    anshitsu - Process Runnner for Command Line Interface
+    main.py - Process Runnner for Command Line Interface
+
 
 SYNOPSIS
-    anshitsu PATH <flags>
+    main.py <flags>
+
+DESCRIPTION
+    This utility converts the colors of images such as photos.
+
+    If you specify a directory path, it will convert
+    the image files in the specified directory.
+    If you specify a file path, it will convert the specified file.
+    If you specify an option, the specified conversion will be performed.
+
+
+    Tosaka mode is a mode that expresses the preference of
+    Tosaka-senpai, a character in "Kyūkyoku Chōjin R",
+    for "photos taken with Tri-X that look like they were
+    burned onto No. 4 or No. 5 photographic paper".
+    Only use floating-point numbers when using this mode;
+    numbers around 2.4 will make it look right.
+
+FLAGS
+    --path=PATH
+        Type: Optional[Optional]
+        Default: None
+        Directory or File Path. Defaults to None.
+    -k, --keep_alpha=KEEP_ALPHA
+        Type: bool
+        Default: False
+    --colorautoadjust=COLORAUTOADJUST
+        Type: bool
+        Default: False
+        Use colorautoadjust algorithm. Defaults to False.
+    --colorstretch=COLORSTRETCH
+        Type: bool
+        Default: False
+        Use colorstretch algorithm. Defaults to False.
+    -g, --grayscale=GRAYSCALE
+    -g, --grayscale=GRAYSCALE
+        Type: bool
+        Default: False
+        Convert to grayscale. Defaults to False.
+    -i, --invert=INVERT
+        Type: bool
+        Default: False
+        Invert color. Defaults to False.
+    --color=COLOR
+        Type: Optional[Optional]
+        Default: None
+        Fix color balance. Defaults to None.
+    -b, --brightness=BRIGHTNESS
+        Type: Optional[Optional]
+        Default: None
+        Fix brightness. Defaults to None.
+    --sharpness=SHARPNESS
+        Type: Optional[Optional]
+        Default: None
+        Fix sharpness. Defaults to None.
+    --contrast=CONTRAST
+        Type: Optional[Optional]
+        Default: None
+        Fix contrast. Defaults to None.
+    -t, --tosaka=TOSAKA
+        Type: Optional[Optional]
+        Default: None
+        Convert to grayscale with fix contrast. Defaults to None.
+        Convert to grayscale with fix contrast. Defaults to None.
+    --outputrgb=OUTPUTRGB
+        Type: bool
+        Default: False
+        Outputs a monochrome image in RGB. Defaults to False.
+    --sepia=SEPIA
+        Type: bool
+        Default: False
+        Convert to RGB colored by sepia. Defaults to False.
+    --cyanotype=CYANOTYPE
+        Type: bool
+        Default: False
+        Convert to RGB like cyanotype. Defaults to False.
+    -n, --noise=NOISE
+        Type: Optional[Optional]
+        Default: None
+        Add Gaussian noise. Defaults to None.
+    --overwrite=OVERWRITE
+        Type: bool
+        Default: False
+        Default: False
+    --overwrite=OVERWRITE
+        Type: Optional[Optional]
+        Convert to RGB like cyanotype. Defaults to False.
+        Convert to RGB colored by sepia. Defaults to False.
+        Default: None
+    -t, --tosaka=TOSAKA
+        Default: None
+        Default: None
+    --path=PATH
+    burned onto No. 4 or No. 5 photographic paper".
+NAME
+    main.py - Process Runnner for Command Line Interface
+    main.py - Process Runnner for Command Line Interface
+
+SYNOPSIS
+SYNOPSIS
+    main.py <flags>
+
+
+DESCRIPTION
+DESCRIPTION
+    This utility converts the colors of images such as photos.
+
+    If you specify a directory path, it will convert
+    If you specify a directory path, it will convert
+    the image files in the specified directory.
+    the image files in the specified directory.
+    If you specify a file path, it will convert the specified file.
+    If you specify an option, the specified conversion will be performed.
+
+NAME
+    main.py - Process Runnner for Command Line Interface
+
+SYNOPSIS
+    main.py <flags>
 
 DESCRIPTION
     This utility converts the colors of images such as photos.
@@ -52,6 +181,13 @@ POSITIONAL ARGUMENTS
         Directory or File Path
 
 FLAGS
+    --path=PATH
+        Type: Optional[Optional]
+        Default: None
+        Directory or File Path. Defaults to None.
+    -k, --keep_alpha=KEEP_ALPHA
+        Type: bool
+        Default: False
     --colorautoadjust=COLORAUTOADJUST
         Type: bool
         Default: False
@@ -60,29 +196,65 @@ FLAGS
         Type: bool
         Default: False
         Use colorstretch algorithm. Defaults to False.
-    --grayscale=GRAYSCALE
+    -g, --grayscale=GRAYSCALE
         Type: bool
         Default: False
         Convert to grayscale. Defaults to False.
-    --invert=INVERT
+    -i, --invert=INVERT
         Type: bool
         Default: False
         Invert color. Defaults to False.
-    --tosaka=TOSAKA
+    --color=COLOR
         Type: Optional[Optional]
         Default: None
-        Use Tosaka mode. Defaults to None.
+        Fix color balance. Defaults to None.
+    -b, --brightness=BRIGHTNESS
+        Type: Optional[Optional]
+        Default: None
+        Fix brightness. Defaults to None.
+    --sharpness=SHARPNESS
+        Type: Optional[Optional]
+        Default: None
+        Fix sharpness. Defaults to None.
+    --contrast=CONTRAST
+        Type: Optional[Optional]
+        Default: None
+        Fix contrast. Defaults to None.
+    -t, --tosaka=TOSAKA
+        Type: Optional[Optional]
+        Default: None
+        Convert to grayscale with fix contrast. Defaults to None.
     --outputrgb=OUTPUTRGB
         Type: bool
         Default: False
         Outputs a monochrome image in RGB. Defaults to False.
-    --noise=NOISE
+    --sepia=SEPIA
+        Type: bool
+        Default: False
+        Convert to RGB colored by sepia. Defaults to False.
+    --cyanotype=CYANOTYPE
+        Type: bool
+        Default: False
+        Convert to RGB like cyanotype. Defaults to False.
+    -n, --noise=NOISE
         Type: Optional[Optional]
         Default: None
         Add Gaussian noise. Defaults to None.
-
-NOTES
-    You can also use flags syntax for POSITIONAL ARGUMENTS
+    --overwrite=OVERWRITE
+        Type: bool
+        Default: False
+        Overwrite original files. Defaults to False.
+    -v, --version=VERSION
+        Type: bool
+        Default: False
+        Show version. Defaults to False.
+    -l, --line_drawing=LINE_DRAWING
+        Type: bool
+        Default: False
+        Convert to like line drawing. Defaults to False.
+    --posterize=POSTERIZE
+        Type: Optional[Optional]
+        Default: None
 ```
 
 If a directory is specified in the path, an `out` directory will be created in the specified directory, and the converted JPEG and PNG images will be stored in PNG format.

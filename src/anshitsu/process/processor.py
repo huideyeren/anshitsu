@@ -17,6 +17,7 @@ from anshitsu.process.posterize import posterize
 from anshitsu.process.remove_alpha import remove_alpha
 from anshitsu.process.sepia import sepia
 from anshitsu.process.sharpness import sharpness
+from anshitsu.process.create_alpha_mask import create_alpha_mask
 
 
 class Processor:
@@ -36,23 +37,24 @@ class Processor:
     )
 
     def __init__(
-            self,
-            image: Image,
-            colorautoadjust: bool = False,
-            colorstretch: bool = False,
-            grayscale: bool = False,
-            line_drawing: bool = False,
-            invert: bool = False,
-            tosaka: Optional[float] = None,
-            outputrgb: bool = False,
-            noise: Optional[float] = None,
-            color: Optional[float] = None,
-            brightness: Optional[float] = None,
-            sharpness: Optional[float] = None,
-            contrast: Optional[float] = None,
-            sepia: bool = False,
-            cyanotype: bool = False,
-            posterize: Optional[int] = None,
+        self,
+        image: Image,
+        colorautoadjust: bool = False,
+        colorstretch: bool = False,
+        grayscale: bool = False,
+        line_drawing: bool = False,
+        invert: bool = False,
+        tosaka: Optional[float] = None,
+        outputrgb: bool = False,
+        noise: Optional[float] = None,
+        color: Optional[float] = None,
+        brightness: Optional[float] = None,
+        sharpness: Optional[float] = None,
+        contrast: Optional[float] = None,
+        sepia: bool = False,
+        cyanotype: bool = False,
+        posterize: Optional[int] = None,
+        keep_alpha: bool = False,
     ) -> None:
         """
         __init__ constructor.
@@ -63,11 +65,21 @@ class Processor:
             colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
             grayscale (bool, optional): Convert to grayscale. Defaults to False.
             invert (bool, optional): Invert color. Defaults to False.
+            color (Optional[float], optional): Fix color balance. Defaults to None.
+            brightness (Optional[float], optional): Fix brightness. Defaults to None.
+            sharpness (Optional[float], optional): Fix sharpness. Defaults to None.
+            contrast (Optional[float], optional): Fix contrast. Defaults to None.
             tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
             outputrgb (bool, optional): Outputs a monochrome image in RGB. Defaults to False.
             noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
+            cyanotype (bool, optional): Convert to RGB like cyanotype. Defaults to False.
+            sepia (bool, optional): Convert to RGB colored by sepia. Defaults to False.
+            noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
+            line_drawing (bool, optional): Convert to like line drawing. Defaults to False.
+            keep_alpha (bool, optional): Keep alpha mask. Defaults to False.
         """
         self.image = image
+        self.keep_alpha = keep_alpha
         self.line_drawing = line_drawing
         self.colorautoadjust = colorautoadjust
         self.colorstretch = colorstretch
@@ -87,6 +99,11 @@ class Processor:
         self.posterize = posterize
 
     def process(self) -> Image:
+        if self.keep_alpha:
+            alpha = create_alpha_mask(self.image)
+        else:
+            alpha = None
+
         self.image = remove_alpha(self.image)
 
         if self.invert:
@@ -131,17 +148,7 @@ class Processor:
         if self.cyanotype:
             self.image = cyanotype(self.image)
 
-        return self.image
+        if alpha is not None:
+            self.image.putalpha(alpha)
 
-    def __output_rgb(self) -> Image:
-        """
-        __output_rgb
-
-        Outputs a monochrome image in RGB.
-
-        Returns:
-            Image: processed image.
-        """
-        if self.image.mode == "L":
-            self.image = self.image.convert("RGB")
         return self.image
