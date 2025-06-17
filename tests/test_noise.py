@@ -10,6 +10,7 @@ def test_noise_by_rgb(setup):
         os.path.join(".", "tests", "pic", "dog.jpg"),
     )
     image = Processor(image=image, noise=10.0).process()
+    image.show()
     assert image.mode == "RGB"
 
 
@@ -18,6 +19,7 @@ def test_noise_by_grayscale(setup):
         os.path.join(".", "tests", "pic", "tokyo_station.jpg"),
     )
     image = Processor(image=image, noise=10.0).process()
+    image.show()
     assert image.mode == "L"
 
 
@@ -26,6 +28,7 @@ def test_noise_by_rgba(setup):
         os.path.join(".", "tests", "pic", "nullpo.png"),
     )
     image = Processor(image=image, noise=10.0).process()
+    image.show()
     assert image.mode == "RGB"
 
 
@@ -34,4 +37,5 @@ def test_noise_by_grayscale_with_alpha(setup):
         os.path.join(".", "tests", "pic", "test.png"),
     )
     image = Processor(image=image, noise=10.0).process()
+    image.show()
     assert image.mode == "L"

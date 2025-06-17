@@ -40,6 +40,7 @@ def test_alpha_by_rgba(setup):
     )
     alpha = create_alpha_mask(image)
     image.putalpha(alpha)
+    image.show()
     assert image.mode == "RGBA"
 
 
@@ -49,4 +50,5 @@ def test_alpha_by_grayscale_with_alpha(setup):
     )
     alpha = create_alpha_mask(image)
     image.putalpha(alpha)
+    image.show()
     assert image.mode == "LA"
