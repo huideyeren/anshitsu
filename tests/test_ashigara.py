@@ -13,6 +13,13 @@ def test_ashigara_changes_rgb_color():
     assert image.getpixel((0, 0)) != (120, 120, 120)
 
 
+def test_ashigara_preserves_highlight_detail():
+    image = Image.new("RGB", (1, 1), (245, 245, 245))
+    image = ashigara(image)
+
+    assert max(image.getpixel((0, 0))) < 255
+
+
 def test_ashigara_by_rgb(setup):
     image = Image.open(
         os.path.join(".", "tests", "pic", "dog.jpg"),
