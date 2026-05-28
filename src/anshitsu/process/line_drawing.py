@@ -3,10 +3,9 @@ from PIL import Image, ImageFilter, ImageChops, ImageOps
 
 def line_drawing(image: Image, invert: bool) -> Image:
     """
-    line_drawing
+    Convert an image to a line drawing.
 
-    Paint like line drawing on an image.
-    If invert is True, the image will be inverted.
+    If invert is False, invert the generated line drawing.
 
     Parameters:
         image: Image

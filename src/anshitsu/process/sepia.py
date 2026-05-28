@@ -3,9 +3,7 @@ from PIL import Image
 
 def sepia(image: Image) -> Image:
     """
-    sepia
-
-    Outputs a monochrome image colored at sepia.
+    Colorize a monochrome image with sepia tones.
 
     Returns:
         Image: processed image.

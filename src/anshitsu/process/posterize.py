@@ -1,15 +1,13 @@
 from PIL import Image, ImageOps
 
 
-def posterize(image: Image, colors: int):
+def posterize(image: Image, colors: int) -> Image:
     """
-    posterize
-
     Posterize an image.
 
     Parameters:
         image (Image): image to posterize
-        colors (int): number of colors
+        colors (int): number of bits to keep for each color channel
 
     Returns:
         Image: posterized image

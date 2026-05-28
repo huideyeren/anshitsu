@@ -5,9 +5,7 @@ from colorcorrect.util import to_pil, from_pil
 
 def color_stretch(image: Image) -> Image:
     """
-    color_stretch
-
-    Use Color Stretch algorithm.
+    Apply gray-world white balance and color stretching.
 
     Parameters:
         image: Image

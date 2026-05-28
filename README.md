@@ -37,29 +37,29 @@ DESCRIPTION
     If you specify a file path, it will convert the specified file.
     If you specify an option, the specified conversion will be performed.
 
-    Tosaka mode is a mode that expresses the preference of
-    Tosaka-senpai, a character in "Kyūkyoku Chōjin R",
-    for "photos taken with Tri-X that look like they were
-    burned onto No. 4 or No. 5 photographic paper".
-    Only use floating-point numbers when using this mode;
-    numbers around 2.4 will make it look right.
+    Tosaka mode is named after Tosaka-senpai's "Tri-X de banzen"
+    line from "Kyūkyoku Chōjin R". It aims for a grainy
+    black-and-white photo look similar to Kodak Tri-X film.
+    This mode converts the image to grayscale and adjusts contrast.
+    Use floating-point numbers; values around 2.4 usually work well.
 
 FLAGS
     --path=PATH
         Type: Optional[Union]
         Default: None
-        Directory or File Path. Defaults to None.
+        Directory or file path. Defaults to None.
     -k, --keep_alpha=KEEP_ALPHA
         Type: bool
         Default: False
+        Keep the alpha channel. Defaults to False.
     --colorautoadjust=COLORAUTOADJUST
         Type: bool
         Default: False
-        Use colorautoadjust algorithm. Defaults to False.
+        Correct colors using Automatic Color Equalization. Defaults to False.
     --colorstretch=COLORSTRETCH
         Type: bool
         Default: False
-        Use colorstretch algorithm. Defaults to False.
+        Apply gray-world white balance and color stretching. Defaults to False.
     -g, --grayscale=GRAYSCALE
         Type: bool
         Default: False
@@ -67,39 +67,47 @@ FLAGS
     -i, --invert=INVERT
         Type: bool
         Default: False
-        Invert color. Defaults to False.
+        Invert image colors. Defaults to False.
     --color=COLOR
         Type: Optional[Union]
         Default: None
-        Fix color balance. Defaults to None.
+        Adjust color. Defaults to None.
     -b, --brightness=BRIGHTNESS
         Type: Optional[Union]
         Default: None
-        Fix brightness. Defaults to None.
+        Adjust brightness. Defaults to None.
     --sharpness=SHARPNESS
         Type: Optional[Union]
         Default: None
-        Fix sharpness. Defaults to None.
+        Adjust sharpness. Defaults to None.
     --contrast=CONTRAST
         Type: Optional[Union]
         Default: None
-        Fix contrast. Defaults to None.
+        Adjust contrast. Defaults to None.
     -t, --tosaka=TOSAKA
         Type: Optional[Union]
         Default: None
-        Convert to grayscale with fix contrast. Defaults to None.
+        Use Tosaka mode. Defaults to None.
     --outputrgb=OUTPUTRGB
         Type: bool
         Default: False
-        Outputs a monochrome image in RGB. Defaults to False.
+        Convert a monochrome image to RGB. Defaults to False.
     --sepia=SEPIA
         Type: bool
         Default: False
-        Convert to RGB colored by sepia. Defaults to False.
+        Colorize a monochrome image with sepia tones. Defaults to False.
     --cyanotype=CYANOTYPE
         Type: bool
         Default: False
-        Convert to RGB like cyanotype. Defaults to False.
+        Colorize a monochrome image with cyanotype-like Prussian blue. Defaults to False.
+    -r, --rochester=ROCHESTER
+        Type: bool
+        Default: False
+        Apply a warm color grade inspired by Kodak PORTRA 400. Defaults to False.
+    -a, --ashigara=ASHIGARA
+        Type: bool
+        Default: False
+        Apply a vivid color grade inspired by Fujifilm Velvia 100. Defaults to False.
     -n, --noise=NOISE
         Type: Optional[Union]
         Default: None
@@ -108,17 +116,22 @@ FLAGS
         Type: bool
         Default: False
         Overwrite original files. Defaults to False.
-    -v, --version=VERSION
+    --version=VERSION
         Type: bool
         Default: False
         Show version. Defaults to False.
     -l, --line_drawing=LINE_DRAWING
         Type: bool
         Default: False
-        Convert to like line drawing. Defaults to False.
+        Convert to a line drawing. Defaults to False.
     --posterize=POSTERIZE
         Type: Optional[Union]
         Default: None
+        Posterize the image. Defaults to None.
+    --vignette=VIGNETTE
+        Type: Optional[Union]
+        Default: None
+        Darken image edges with a radial vignette. Defaults to None.
 ```
 
 If a directory is specified in the path, an `out` directory will be created in the specified directory, and the converted JPEG and PNG images will be stored in PNG format.
@@ -144,9 +157,9 @@ Inverts the colors of an image using Pillow's built-in algorithm.
 
 In the case of negative film, color conversion that takes into account the film base color is not performed, but we plan to follow up with a feature to be developed in the future.
 
-### colorautoajust
+### colorautoadjust
 
-We will use the "automatic color equalization" algorithm described in the following paper to apply color correction.
+Applies color correction using the Automatic Color Equalization algorithm described in the following paper.
 
 This process is more time consuming than the algorithm used in "colorstretch", but it can reproduce more natural colors.
 
@@ -158,7 +171,7 @@ A. Rizzi, C. Gatta and D. Marini, "A new algorithm for unsupervised global and l
 
 The "gray world" and "stretch" algorithms described in the following paper are combined to apply color correction.
 
-This process is faster than the algorithm used in "colorautoajust".
+This process is faster than the algorithm used in "colorautoadjust".
 
 (References)
 
@@ -174,21 +187,35 @@ Note: This article is written in Japanese.
 
 ### Tosaka mode
 
-Tosaka mode is a mode that expresses the preference of Tosaka-senpai, a character in "Kyūkyoku Chōjin R", for "photos taken with Tri-X that look like they were burned onto No. 4 or No. 5 photographic paper".
+Tosaka mode is named after Tosaka-senpai's "Tri-X de banzen" line from "Kyūkyoku Chōjin R". It aims for a grainy black-and-white photo look similar to Kodak Tri-X film.
 
-Only use floating-point numbers when using this mode; numbers around 2.4 will make it look right.
+Use floating-point numbers when using this mode; values around 2.4 usually work well.
 
 When this mode is specified, color images will also be converted to grayscale.
 
 ### outputrgb
 
-Outputs a monochrome image in RGB.
+Converts a monochrome image to RGB.
+
+### rochester
+
+Applies a warm, low-saturation color grade inspired by Kodak PORTRA 400.
+
+### ashigara
+
+Applies a vivid, high-contrast color grade inspired by Fujifilm Velvia 100.
 
 ### noise
 
 Add Gaussian noise.
 
 To add noise, you need to specify a floating-point number; a value of about 10.0 will be just right.
+
+### vignette
+
+Darkens image edges with a radial vignette.
+
+To add a vignette, specify a floating-point number between 0.0 and 1.0.
 
 ## Special Thanks
 

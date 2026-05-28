@@ -19,6 +19,27 @@ def test_main_for_image_file(capsys, setup):
     assert "The cli was completed successfully." in result
 
 
+def test_main_for_vignette(capsys, setup):
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--vignette=0.8"])
+    captured = capsys.readouterr()
+    result = captured.out
+    assert "The cli was completed successfully." in result
+
+
+def test_main_for_rochester(capsys, setup):
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--rochester"])
+    captured = capsys.readouterr()
+    result = captured.out
+    assert "The cli was completed successfully." in result
+
+
+def test_main_for_ashigara(capsys, setup):
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--ashigara"])
+    captured = capsys.readouterr()
+    result = captured.out
+    assert "The cli was completed successfully." in result
+
+
 def test_main_for_invalid_directory(capfd, setup):
     with pytest.raises(SystemExit):
         fire.Fire(cli, ["./src/anshitsu/"])

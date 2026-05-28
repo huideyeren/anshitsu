@@ -3,13 +3,11 @@ from PIL import Image, ImageEnhance
 
 def brightness(image: Image, brightness: float) -> Image:
     """
-    brightness
-
-    Fix brightness.
+    Adjust image brightness.
 
     Parameters:
         image: Image
-        brightness: float
+        brightness: enhancement factor
 
     Returns:
         Image: processed image.

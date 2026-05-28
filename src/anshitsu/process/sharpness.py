@@ -3,13 +3,11 @@ from PIL import Image, ImageEnhance
 
 def sharpness(image: Image, sharpness: float) -> Image:
     """
-    sharpness
-
-    Fix sharpness.
+    Adjust image sharpness.
 
     Parameters:
         image: Image
-        sharpness: float
+        sharpness: enhancement factor
 
     Returns:
         Image: processed image.

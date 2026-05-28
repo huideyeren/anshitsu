@@ -5,16 +5,14 @@ from PIL import Image
 
 def create_alpha_mask(image: Image) -> Union[Image, None]:
     """
-    create_alpha_mask
-
-    If image has alpha layer, create alpha mask.
+    Create an alpha mask from an image with an alpha channel.
 
     Parameters:
         image: Image
 
     Returns:
-        Image: cutout alpha mask.
-        None: Image has not alpha mask.
+        Image: alpha mask.
+        None: image has no alpha channel.
     """
     if image.mode == "RGBA":
         _, _, _, alpha = image.split()

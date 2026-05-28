@@ -2,6 +2,7 @@ from typing import Optional, Tuple
 
 from PIL import Image
 
+from anshitsu.process.ashigara import ashigara
 from anshitsu.process.brightness import brightness
 from anshitsu.process.color import color
 from anshitsu.process.color_auto_adjust import color_auto_adjust
@@ -15,16 +16,16 @@ from anshitsu.process.noise import noise
 from anshitsu.process.output_rgb import output_rgb
 from anshitsu.process.posterize import posterize
 from anshitsu.process.remove_alpha import remove_alpha
+from anshitsu.process.rochester import rochester
 from anshitsu.process.sepia import sepia
 from anshitsu.process.sharpness import sharpness
 from anshitsu.process.create_alpha_mask import create_alpha_mask
+from anshitsu.process.vignette import vignette
 
 
 class Processor:
     """
-    Perform processing.
-
-    Passing an image and options to the constructor will convert the specified image.
+    Apply the requested image processing operations.
     """
 
     RGB_RED_VALUE: int = 255
@@ -53,30 +54,36 @@ class Processor:
         contrast: Optional[float] = None,
         sepia: bool = False,
         cyanotype: bool = False,
+        rochester: bool = False,
+        ashigara: bool = False,
         posterize: Optional[int] = None,
+        vignette: Optional[float] = None,
         keep_alpha: bool = False,
     ) -> None:
         """
-        __init__ constructor.
+        Initialize a processor for an image and processing options.
 
         Args:
             image (Image): Image file.
-            colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
-            colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
+            colorautoadjust (bool, optional): Correct colors using Automatic Color Equalization. Defaults to False.
+            colorstretch (bool, optional): Apply gray-world white balance and color stretching. Defaults to False.
             grayscale (bool, optional): Convert to grayscale. Defaults to False.
-            invert (bool, optional): Invert color. Defaults to False.
-            color (Optional[float], optional): Fix color balance. Defaults to None.
-            brightness (Optional[float], optional): Fix brightness. Defaults to None.
-            sharpness (Optional[float], optional): Fix sharpness. Defaults to None.
-            contrast (Optional[float], optional): Fix contrast. Defaults to None.
+            line_drawing (bool, optional): Convert to a line drawing. Defaults to False.
+            invert (bool, optional): Invert image colors. Defaults to False.
             tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
-            outputrgb (bool, optional): Outputs a monochrome image in RGB. Defaults to False.
+            outputrgb (bool, optional): Convert a monochrome image to RGB. Defaults to False.
             noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
-            cyanotype (bool, optional): Convert to RGB like cyanotype. Defaults to False.
-            sepia (bool, optional): Convert to RGB colored by sepia. Defaults to False.
-            noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
-            line_drawing (bool, optional): Convert to like line drawing. Defaults to False.
-            keep_alpha (bool, optional): Keep alpha mask. Defaults to False.
+            color (Optional[float], optional): Adjust color. Defaults to None.
+            brightness (Optional[float], optional): Adjust brightness. Defaults to None.
+            sharpness (Optional[float], optional): Adjust sharpness. Defaults to None.
+            contrast (Optional[float], optional): Adjust contrast. Defaults to None.
+            sepia (bool, optional): Colorize a monochrome image with sepia tones. Defaults to False.
+            cyanotype (bool, optional): Colorize a monochrome image with cyanotype-like Prussian blue. Defaults to False.
+            rochester (bool, optional): Apply a warm color grade inspired by Kodak PORTRA 400. Defaults to False.
+            ashigara (bool, optional): Apply a vivid color grade inspired by Fujifilm Velvia 100. Defaults to False.
+            posterize (Optional[int], optional): Posterize the image. Defaults to None.
+            vignette (Optional[float], optional): Darken image edges with a radial vignette. Defaults to None.
+            keep_alpha (bool, optional): Keep the alpha channel. Defaults to False.
         """
         self.image = image
         self.keep_alpha = keep_alpha
@@ -96,7 +103,10 @@ class Processor:
         self.noise = noise
         self.sepia = sepia
         self.cyanotype = cyanotype
+        self.rochester = rochester
+        self.ashigara = ashigara
         self.posterize = posterize
+        self.vignette = vignette
 
     def process(self) -> Image:
         if self.keep_alpha:
@@ -147,6 +157,15 @@ class Processor:
 
         if self.cyanotype:
             self.image = cyanotype(self.image)
+
+        if self.rochester:
+            self.image = rochester(self.image)
+
+        if self.ashigara:
+            self.image = ashigara(self.image)
+
+        if self.vignette is not None:
+            self.image = vignette(self.image, self.vignette)
 
         if alpha is not None:
             self.image.putalpha(alpha)
