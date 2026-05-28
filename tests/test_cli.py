@@ -1,5 +1,3 @@
-import os.path
-
 import fire
 import pytest
 
@@ -8,14 +6,14 @@ from anshitsu.cli import cli
 
 
 def test_main_for_dir(capsys, setup):
-    fire.Fire(cli, ["./tests/pic", "--tosaka=2.4", "--outputrgb"])
+    fire.Fire(cli, [str(setup), "--tosaka=2.4", "--outputrgb"])
     captured = capsys.readouterr()
     result = captured.out
     assert "The cli was completed successfully." in result
 
 
 def test_main_for_image_file(capsys, setup):
-    fire.Fire(cli, ["./tests/pic/dog.jpg"])
+    fire.Fire(cli, [str(setup / "dog.jpg")])
     captured = capsys.readouterr()
     result = captured.out
     assert "The cli was completed successfully." in result
@@ -49,35 +47,35 @@ def test_main_for_string_not_path(capfd, setup):
 
 
 def test_main_for_creating_directory_by_default(capfd, setup):
-    fire.Fire(cli, ["./tests/pic/dog.jpg"])
+    fire.Fire(cli, [str(setup / "dog.jpg")])
     captured = capfd.readouterr()
     error = captured.err
 
-    assert os.path.exists("./tests/pic/anshitsu_out")
+    assert (setup / "anshitsu_out").exists()
 
 
 def test_main_for_creating_directory_by_overwrite_mode(capfd, setup):
-    fire.Fire(cli, ["./tests/pic/dog.jpg", "--overwrite", "--tosaka=2.4"])
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--overwrite", "--tosaka=2.4"])
     captured = capfd.readouterr()
     error = captured.err
 
-    assert os.path.exists("./tests/pic/anshitsu_orig")
+    assert (setup / "anshitsu_orig").exists()
 
 
 def test_main_for_saving_original_files_by_overwrite_mode(capfd, setup):
-    fire.Fire(cli, ["./tests/pic/dog.jpg", "--overwrite", "--tosaka=2.4"])
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--overwrite", "--tosaka=2.4"])
     captured = capfd.readouterr()
     error = captured.err
 
-    assert os.path.exists("./tests/pic/anshitsu_orig/dog.jpg")
+    assert (setup / "anshitsu_orig/dog.jpg").exists()
 
 
 def test_main_for_exist_converted_files_by_overwrite_mode(capfd, setup):
-    fire.Fire(cli, ["./tests/pic/dog.jpg", "--overwrite", "--tosaka=2.4"])
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--overwrite", "--tosaka=2.4"])
     captured = capfd.readouterr()
     error = captured.err
 
-    assert os.path.exists("./tests/pic/dog.png")
+    assert (setup / "dog.png").exists()
 
 
 def test_main_for_show_version(capfd, setup):
