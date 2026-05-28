@@ -3,9 +3,7 @@ from PIL import Image, ImageOps
 
 def cyanotype(image: Image) -> Image:
     """
-    cyanotype
-
-    Outputs a monochrome image colored at prussian blue like cyanotype.
+    Colorize a monochrome image with cyanotype-like Prussian blue.
 
     Returns:
         Image: processed image.

@@ -3,22 +3,18 @@ from PIL import Image, ImageEnhance
 
 def contrast(image: Image, contrast: float) -> Image:
     """
-    contrast
+    Adjust image contrast.
 
-    Fix contrast.
+    Used by Tosaka mode.
 
-    Using in Tosaka mode.
-
-    Tosaka mode is a mode that expresses the preference of
-    Tosaka-senpai, a character in "Kyūkyoku Chōjin R",
-    for "photos taken with Tri-X that look like they were
-    burned onto No. 4 or No. 5 photographic paper".
-    Only use floating-point numbers when using this mode;
-    numbers around 2.4 will make it look right.
+    Tosaka mode is named after Tosaka-senpai's "Tri-X de banzen"
+    line from "Kyūkyoku Chōjin R". It aims for a grainy
+    black-and-white photo look similar to Kodak Tri-X film.
+    Values around 2.4 usually work well.
 
     Parameters:
         image: Image
-        contrast: float
+        contrast: enhancement factor
 
     Returns:
         Image: processed image.

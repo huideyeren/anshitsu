@@ -5,9 +5,10 @@ from colorcorrect.util import to_pil, from_pil
 
 def color_auto_adjust(image: Image) -> Image:
     """
-    color_auto_adjust
+    Correct colors using the Automatic Color Equalization algorithm.
 
-    Use Color Auto Adjust algorithm.
+    This process is based on the 2002 paper on Automatic Color Equalization
+    by Carlo Gatta and coauthors.
 
     Returns:
         Image: processed image.

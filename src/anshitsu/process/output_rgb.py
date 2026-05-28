@@ -3,9 +3,7 @@ from PIL import Image
 
 def output_rgb(image: Image) -> Image:
     """
-    output_rgb
-
-    Outputs a monochrome image in RGB.
+    Convert a monochrome image to RGB.
 
     Returns:
         Image: processed image.

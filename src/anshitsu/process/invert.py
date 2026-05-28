@@ -3,9 +3,7 @@ from PIL import Image, ImageOps
 
 def invert(image: Image) -> Image:
     """
-    invert
-
-    Invert color.
+    Invert image colors.
 
     Parameters:
         image: Image

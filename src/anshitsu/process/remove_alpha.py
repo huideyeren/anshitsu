@@ -5,9 +5,7 @@ from PIL import Image
 
 def remove_alpha(image: Image) -> Image:
     """
-    __rgba_convert
-
-    Converts image data that contains transparency to image data that does not contain transparency.
+    Remove transparency from an image by compositing it on a white background.
 
     Returns:
         Image: processed image.

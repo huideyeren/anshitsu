@@ -1,17 +1,15 @@
 from PIL import Image
 
 
-def put_alpha_mask(image: Image, alpha: Image) -> Image:
+def put_alpha_mask(image: Image, alpha: Image) -> None:
     """
-    put_alpha_mask
-
-    Adds or replaces the alpha layer in this image.
+    Add or replace the alpha channel in an image.
 
     Parameters:
         image: Image
         alpha: Image
 
     Returns:
-        Image: Image having alpha layer.
+        None: PIL mutates the image in place.
     """
     return image.putalpha(alpha)

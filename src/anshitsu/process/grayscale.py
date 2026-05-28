@@ -6,9 +6,7 @@ from PIL import Image
 
 def grayscale(image: Image) -> Image:
     """
-    grayscale
-
-    Converts to grayscale based on the luminance in the CIE XYZ color space.
+    Convert an image to grayscale using CIE XYZ luminance.
 
     Parameters:
         image: Image

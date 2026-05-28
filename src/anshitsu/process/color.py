@@ -3,13 +3,11 @@ from PIL import Image, ImageEnhance
 
 def color(image: Image, color: float) -> Image:
     """
-    contrast
-
-    Fix color balance.
+    Adjust image color.
 
     Parameters:
         image: Image
-        color: float
+        color: enhancement factor
 
     Returns:
         Image: processed image.

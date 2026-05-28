@@ -11,17 +11,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
         poetry-version: [1.8.2]
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run image
-        uses: abatilo/actions-poetry@v2.0.0
+        uses: abatilo/actions-poetry@v4.0.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install Dependencies
@@ -33,8 +33,8 @@ jobs:
       - name: Run Tests
         run: poetry run pytest -v tests/ --cov-config=.coveragerc --cov=src/ --cov-branch --cov-report=xml
       - name: Upload coverage to Codecov
-        if: ${{ matrix.python-version==3.10 }}
-        uses: codecov/codecov-action@v1
+        if: ${{ matrix.python-version == '3.14' && matrix.os == 'ubuntu-latest' }}
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # ← CODECOVのアップロードトークン
           file: ./coverage.xml

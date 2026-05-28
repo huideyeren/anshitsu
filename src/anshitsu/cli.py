@@ -28,11 +28,14 @@ def cli(
     outputrgb: bool = False,
     sepia: bool = False,
     cyanotype: bool = False,
+    rochester: bool = False,
+    ashigara: bool = False,
     noise: Optional[float] = None,
     overwrite: bool = False,
     version: bool = False,
     line_drawing: bool = False,
     posterize: Optional[int] = None,
+    vignette: Optional[float] = None,
 ) -> str:
     """
     Process Runnner for Command Line Interface
@@ -44,31 +47,35 @@ def cli(
     If you specify a file path, it will convert the specified file.
     If you specify an option, the specified conversion will be performed.
 
-    Tosaka mode is a mode that expresses the preference of
-    Tosaka-senpai, a character in "Kyūkyoku Chōjin R",
-    for "photos taken with Tri-X that look like they were
-    burned onto No. 4 or No. 5 photographic paper".
-    Only use floating-point numbers when using this mode;
-    numbers around 2.4 will make it look right.
+    Tosaka mode is named after Tosaka-senpai's "Tri-X de banzen"
+    line from "Kyūkyoku Chōjin R". It aims for a grainy
+    black-and-white photo look similar to Kodak Tri-X film.
+    This mode converts the image to grayscale and adjusts contrast.
+    Use floating-point numbers; values around 2.4 usually work well.
 
     Args:
-        path (Optional[str], optional): Directory or File Path. Defaults to None.
-        overwrite (bool, optional): Overwrite original files. Defaults to False.
-        colorautoadjust (bool, optional): Use colorautoadjust algorithm. Defaults to False.
-        colorstretch (bool, optional): Use colorstretch algorithm. Defaults to False.
+        path (Optional[str], optional): Directory or file path. Defaults to None.
+        keep_alpha (bool, optional): Keep the alpha channel. Defaults to False.
+        colorautoadjust (bool, optional): Correct colors using Automatic Color Equalization. Defaults to False.
+        colorstretch (bool, optional): Apply gray-world white balance and color stretching. Defaults to False.
         grayscale (bool, optional): Convert to grayscale. Defaults to False.
-        invert (bool, optional): Invert color. Defaults to False.
-        color (Optional[float], optional): Fix color balance. Defaults to None.
-        brightness (Optional[float], optional): Fix brightness. Defaults to None.
-        sharpness (Optional[float], optional): Fix sharpness. Defaults to None.
-        contrast (Optional[float], optional): Fix contrast. Defaults to None.
-        tosaka (Optional[float], optional): Convert to grayscale with fix contrast. Defaults to None.
-        outputrgb (bool, optional): Outputs a monochrome image in RGB. Defaults to False.
-        cyanotype (bool, optional): Convert to RGB like cyanotype. Defaults to False.
-        sepia (bool, optional): Convert to RGB colored by sepia. Defaults to False.
+        invert (bool, optional): Invert image colors. Defaults to False.
+        color (Optional[float], optional): Adjust color. Defaults to None.
+        brightness (Optional[float], optional): Adjust brightness. Defaults to None.
+        sharpness (Optional[float], optional): Adjust sharpness. Defaults to None.
+        contrast (Optional[float], optional): Adjust contrast. Defaults to None.
+        tosaka (Optional[float], optional): Use Tosaka mode. Defaults to None.
+        outputrgb (bool, optional): Convert a monochrome image to RGB. Defaults to False.
+        sepia (bool, optional): Colorize a monochrome image with sepia tones. Defaults to False.
+        cyanotype (bool, optional): Colorize a monochrome image with cyanotype-like Prussian blue. Defaults to False.
+        rochester (bool, optional): Apply a warm color grade inspired by Kodak PORTRA 400. Defaults to False.
+        ashigara (bool, optional): Apply a vivid color grade inspired by Fujifilm Velvia 100. Defaults to False.
         noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
-        line_drawing (bool, optional): Convert to like line drawing. Defaults to False.
+        overwrite (bool, optional): Overwrite original files. Defaults to False.
         version (bool, optional): Show version. Defaults to False.
+        line_drawing (bool, optional): Convert to a line drawing. Defaults to False.
+        posterize (Optional[int], optional): Posterize the image. Defaults to None.
+        vignette (Optional[float], optional): Darken image edges with a radial vignette. Defaults to None.
 
     Raises:
         fire.core.FireError: Error that occurs when the specified string is not a path.
@@ -148,9 +155,12 @@ def cli(
             outputrgb=outputrgb,
             cyanotype=cyanotype,
             sepia=sepia,
+            rochester=rochester,
+            ashigara=ashigara,
             noise=noise,
             line_drawing=line_drawing,
             posterize=posterize,
+            vignette=vignette,
         )
         saved_image = psr.process()
         os.makedirs(os.path.join(return_path, output_dir), exist_ok=True)
