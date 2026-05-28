@@ -10,7 +10,7 @@ A tiny digital photographic utility.
 
 ## Install
 
-Run this command in an environment where Python 3.10 or higher is installed.
+Run this command in an environment where a currently supported Python version is installed.
 
 We have tested it on Windows, Mac, and Ubuntu on GitHub Actions, but we have not tested it on Macs with Apple Silicon, so please use it at your own risk on Macs with Apple Silicon.
 

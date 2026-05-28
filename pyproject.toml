@@ -14,13 +14,13 @@ enable = true
 style = "pep440"
 
 [tool.poetry.dependencies]
-python = "<4.0,>=3.11"
+python = "<4.0,>=3.10"
 numpy = "*"
 Pillow = "*"
 colorcorrect = "*"
 fire = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "*"
 flake8 = "*"
 mypy = "*"
@@ -30,14 +30,12 @@ pyproject-flake8 = "*"
 pytest-randomly = "*"
 tox = "*"
 pytest-cov = "*"
-
-[tool.poetry.scripts]
-anshitsu = "anshitsu.main:main"
-
-[tool.poetry.group.dev.dependencies]
 importlib-metadata = "*"
 poetry-dynamic-versioning = "*"
 setuptools = "*"
+
+[tool.poetry.scripts]
+anshitsu = "anshitsu.main:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
