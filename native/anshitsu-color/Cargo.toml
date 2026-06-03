@@ -1,0 +1,13 @@
+[package]
+name = "anshitsu-color"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "anshitsu_color"
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
