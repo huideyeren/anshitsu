@@ -1,68 +1,122 @@
-# from https://zenn.dev/u_not/articles/abcc0ebd71655b
-
 name: Upload Python Package
+
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Next Version"
-        required: true
-        default: "x.y.z"
       release_note:
-        description: "release note"
+        description: "Release notes. Leave empty to generate notes automatically."
         required: false
 
+permissions:
+  contents: write
+
 jobs:
-  deploy:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - name: Read package version
+        id: version
+        run: |
+          VERSION=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['poetry']['version'])")
+          TAG="v${VERSION}"
+          git fetch --tags
+          if git rev-parse "${TAG}" >/dev/null 2>&1; then
+            echo "Tag ${TAG} already exists."
+            exit 1
+          fi
+          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
+
+  build-native:
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact-name: anshitsu-color-linux
+            library-path: native/anshitsu-color/target/release/libanshitsu_color.so
+          - os: macos-latest
+            artifact-name: anshitsu-color-macos
+            library-path: native/anshitsu-color/target/release/libanshitsu_color.dylib
+          - os: windows-latest
+            artifact-name: anshitsu-color-windows
+            library-path: native/anshitsu-color/target/release/anshitsu_color.dll
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build Rust Backend
+        run: cargo build --release --manifest-path native/anshitsu-color/Cargo.toml
+      - name: Upload Native Backend
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.library-path }}
+          if-no-files-found: error
+
+  publish-python:
+    needs: version
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: "3.x"
-    - name: Install dependencies
-      run: curl -sSL https://install.python-poetry.org | python3 -
-    - name: Add Poetry Plugin
-      # poetry plugin add 
-      run: |
-        python -m pip install --upgrade pip
-        pip install poetry-version-plugin
-    - name: PyPI Settings
-      run: |
-        poetry config pypi-token.pypi ${{secrets.PYPI_TOKEN}}
-        poetry config virtualenvs.path --unset
-        poetry config virtualenvs.in-project true
-    - name: Build Poetry
-      run: |
-        git tag v${{ github.event.inputs.version }}
-        poetry build
-        poetry publish
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ github.event.inputs.version }}
-        release_name: Release v${{ github.event.inputs.version }}
-        body: |
-          ${{ github.event.inputs.release_note }}
-        draft: false
-        prerelease: false
-    - name: Get Name of Artifact
-      run: |
-        ARTIFACT_PATHNAME=$(ls dist/*.whl | head -n 1)
-        ARTIFACT_NAME=$(basename $ARTIFACT_PATHNAME)
-        echo "ARTIFACT_PATHNAME=${ARTIFACT_PATHNAME}" >> $GITHUB_ENV
-        echo "ARTIFACT_NAME=${ARTIFACT_NAME}" >> $GITHUB_ENV
-    - name: Upload Whl to Release Assets
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.ARTIFACT_PATHNAME }}
-        asset_name: ${{ env.ARTIFACT_NAME }}
-        asset_content_type: application/x-wheel+zip
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - name: Install Poetry
+        run: pipx install poetry==1.8.2
+      - name: Configure PyPI
+        run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
+      - name: Build Package
+        run: poetry build
+      - name: Publish Package
+        run: poetry publish
+      - name: Upload Python Distribution
+        uses: actions/upload-artifact@v4
+        with:
+          name: anshitsu-python-dist
+          path: dist/*
+          if-no-files-found: error
+
+  create-release:
+    needs:
+      - version
+      - build-native
+      - publish-python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Download Release Assets
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_NOTE: ${{ github.event.inputs.release_note }}
+          TAG: ${{ needs.version.outputs.tag }}
+        run: |
+          if [ -n "${RELEASE_NOTE}" ]; then
+            printf "%s\n" "${RELEASE_NOTE}" > RELEASE_NOTES.md
+            gh release create "${TAG}" release-assets/**/* \
+              --target "${GITHUB_SHA}" \
+              --title "${TAG}" \
+              --notes-file RELEASE_NOTES.md
+          else
+            gh release create "${TAG}" release-assets/**/* \
+              --target "${GITHUB_SHA}" \
+              --title "${TAG}" \
+              --generate-notes
+          fi

@@ -7,6 +7,17 @@ on:
     branches: [main]
 
 jobs:
+  rust-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Run Rust Tests
+        run: cargo test --manifest-path native/anshitsu-color/Cargo.toml
+      - name: Build Rust Backend
+        run: cargo build --release --manifest-path native/anshitsu-color/Cargo.toml
+
   testing:
     strategy:
       fail-fast: false
@@ -32,6 +43,9 @@ jobs:
 #        run: poetry run mypy src/
       - name: Run Tests
         run: poetry run pytest -v tests/ --cov-config=.coveragerc --cov=src/ --cov-branch --cov-report=xml
+      - name: Build Package
+        if: ${{ matrix.python-version == '3.14' && matrix.os == 'ubuntu-latest' }}
+        run: poetry build
       - name: Upload coverage to Codecov
         if: ${{ matrix.python-version == '3.14' && matrix.os == 'ubuntu-latest' }}
         uses: codecov/codecov-action@v6
