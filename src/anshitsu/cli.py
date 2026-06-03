@@ -33,6 +33,7 @@ def cli(
     ashigara: bool = False,
     crossprocess: bool = False,
     apocalypse: bool = False,
+    ultramarine: bool = False,
     roppongi: bool = False,
     classic: bool = False,
     noise: Optional[float] = None,
@@ -78,6 +79,7 @@ def cli(
         ashigara (bool, optional): Apply a vivid color grade inspired by Fujifilm Velvia 100. Defaults to False.
         crossprocess (bool, optional): Apply a random cross-process-style color grade. Defaults to False.
         apocalypse (bool, optional): Apply a red-orange Velvia 100 cross-process preset. Defaults to False.
+        ultramarine (bool, optional): Apply a blue-forward color grade inspired by Kodak Ultramax. Defaults to False.
         roppongi (bool, optional): Apply a smooth fine-grain monochrome preset. Defaults to False.
         classic (bool, optional): Apply a classic high-acutance monochrome preset. Defaults to False.
         noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
@@ -170,6 +172,7 @@ def cli(
             ashigara=ashigara,
             crossprocess=crossprocess,
             apocalypse=apocalypse,
+            ultramarine=ultramarine,
             roppongi=roppongi,
             classic=classic,
             noise=noise,

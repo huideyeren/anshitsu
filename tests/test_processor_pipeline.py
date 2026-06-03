@@ -21,6 +21,7 @@ def test_processor_pipeline_order(monkeypatch):
     monkeypatch.setattr(processor, "ashigara", stage("ashigara"))
     monkeypatch.setattr(processor, "cross_process", stage("cross_process"))
     monkeypatch.setattr(processor, "apocalypse", stage("apocalypse"))
+    monkeypatch.setattr(processor, "ultramarine", stage("ultramarine"))
     monkeypatch.setattr(processor, "color", stage("color"))
     monkeypatch.setattr(processor, "brightness", stage("brightness"))
     monkeypatch.setattr(processor, "sharpness", stage("sharpness"))
@@ -64,6 +65,7 @@ def test_processor_pipeline_order(monkeypatch):
         ashigara=True,
         crossprocess=True,
         apocalypse=True,
+        ultramarine=True,
         posterize=4,
         vignette=0.5,
     ).process()
@@ -76,6 +78,7 @@ def test_processor_pipeline_order(monkeypatch):
         "ashigara",
         "cross_process",
         "apocalypse",
+        "ultramarine",
         "color",
         "brightness",
         "sharpness",
