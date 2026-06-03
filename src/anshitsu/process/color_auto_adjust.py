@@ -2,6 +2,8 @@ import colorcorrect.algorithm as cca
 from PIL import Image
 from colorcorrect.util import to_pil, from_pil
 
+from anshitsu.process import _native_color
+
 
 def color_auto_adjust(image: Image) -> Image:
     """
@@ -15,4 +17,7 @@ def color_auto_adjust(image: Image) -> Image:
     """
     if image.mode == "L":
         return image
+    native_image = _native_color.automatic_color_equalization(image)
+    if native_image is not None:
+        return native_image
     return to_pil(cca.automatic_color_equalization(from_pil(image)))
