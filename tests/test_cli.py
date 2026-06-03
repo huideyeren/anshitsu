@@ -40,6 +40,41 @@ def test_main_for_ashigara(capsys, setup):
     assert "The cli was completed successfully." in result
 
 
+def test_main_for_crossprocess(capsys, setup):
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--crossprocess"])
+    captured = capsys.readouterr()
+    result = captured.out
+    assert "The cli was completed successfully." in result
+
+
+def test_main_for_apocalypse(capsys, setup):
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--apocalypse"])
+    captured = capsys.readouterr()
+    result = captured.out
+    assert "The cli was completed successfully." in result
+
+
+def test_main_for_orthochromatic(capsys, setup):
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--orthochromatic"])
+    captured = capsys.readouterr()
+    result = captured.out
+    assert "The cli was completed successfully." in result
+
+
+def test_main_for_roppongi(capsys, setup):
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--roppongi"])
+    captured = capsys.readouterr()
+    result = captured.out
+    assert "The cli was completed successfully." in result
+
+
+def test_main_for_classic(capsys, setup):
+    fire.Fire(cli, [str(setup / "dog.jpg"), "--classic"])
+    captured = capsys.readouterr()
+    result = captured.out
+    assert "The cli was completed successfully." in result
+
+
 def test_main_for_invalid_directory(capfd, setup):
     with pytest.raises(SystemExit):
         fire.Fire(cli, ["./src/anshitsu/"])
