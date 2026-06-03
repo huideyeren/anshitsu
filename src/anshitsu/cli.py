@@ -19,6 +19,7 @@ def cli(
     colorautoadjust: bool = False,
     colorstretch: bool = False,
     grayscale: bool = False,
+    orthochromatic: bool = False,
     invert: bool = False,
     color: Optional[float] = None,
     brightness: Optional[float] = None,
@@ -30,6 +31,10 @@ def cli(
     cyanotype: bool = False,
     rochester: bool = False,
     ashigara: bool = False,
+    crossprocess: bool = False,
+    apocalypse: bool = False,
+    roppongi: bool = False,
+    classic: bool = False,
     noise: Optional[float] = None,
     overwrite: bool = False,
     version: bool = False,
@@ -59,6 +64,7 @@ def cli(
         colorautoadjust (bool, optional): Correct colors using Automatic Color Equalization. Defaults to False.
         colorstretch (bool, optional): Apply gray-world white balance and color stretching. Defaults to False.
         grayscale (bool, optional): Convert to grayscale. Defaults to False.
+        orthochromatic (bool, optional): Convert to orthochromatic-style grayscale. Defaults to False.
         invert (bool, optional): Invert image colors. Defaults to False.
         color (Optional[float], optional): Adjust color. Defaults to None.
         brightness (Optional[float], optional): Adjust brightness. Defaults to None.
@@ -70,6 +76,10 @@ def cli(
         cyanotype (bool, optional): Colorize a monochrome image with cyanotype-like Prussian blue. Defaults to False.
         rochester (bool, optional): Apply a warm color grade inspired by Kodak PORTRA 400. Defaults to False.
         ashigara (bool, optional): Apply a vivid color grade inspired by Fujifilm Velvia 100. Defaults to False.
+        crossprocess (bool, optional): Apply a random cross-process-style color grade. Defaults to False.
+        apocalypse (bool, optional): Apply a red-orange Velvia 100 cross-process preset. Defaults to False.
+        roppongi (bool, optional): Apply a smooth fine-grain monochrome preset. Defaults to False.
+        classic (bool, optional): Apply a classic high-acutance monochrome preset. Defaults to False.
         noise (Optional[float], optional): Add Gaussian noise. Defaults to None.
         overwrite (bool, optional): Overwrite original files. Defaults to False.
         version (bool, optional): Show version. Defaults to False.
@@ -146,6 +156,7 @@ def cli(
             colorautoadjust=colorautoadjust,
             colorstretch=colorstretch,
             grayscale=grayscale,
+            orthochromatic=orthochromatic,
             color=color,
             contrast=contrast,
             brightness=brightness,
@@ -157,6 +168,10 @@ def cli(
             sepia=sepia,
             rochester=rochester,
             ashigara=ashigara,
+            crossprocess=crossprocess,
+            apocalypse=apocalypse,
+            roppongi=roppongi,
+            classic=classic,
             noise=noise,
             line_drawing=line_drawing,
             posterize=posterize,
