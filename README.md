@@ -125,6 +125,10 @@ FLAGS
         Type: bool
         Default: False
         Apply a red-orange Velvia 100 cross-process preset. Defaults to False.
+    --ultramarine=ULTRAMARINE
+        Type: bool
+        Default: False
+        Apply a blue-forward color grade inspired by Kodak Ultramax. Defaults to False.
     --roppongi=ROPPONGI
         Type: bool
         Default: False
@@ -221,6 +225,7 @@ flowchart TD
     colorPresets --> ashigara[ashigara]
     colorPresets --> crossprocess[crossprocess]
     colorPresets --> apocalypse[apocalypse]
+    colorPresets --> ultramarine[ultramarine]
 
     manual --> color[color]
     manual --> brightness[brightness]
@@ -337,6 +342,12 @@ Cross processing can produce unpredictable color shifts depending on film, chemi
 Applies a red-orange cross-process preset inspired by Fujifilm Velvia 100.
 
 This preset leans into the orange-to-red color cast associated with cross-processing Velvia 100. The strength of the red shift varies slightly each time it runs.
+
+### ultramarine
+
+Applies a blue-forward consumer color film grade inspired by Kodak Ultramax.
+
+This preset emphasizes blues while keeping reds slightly restrained, with highlight compression to avoid harsh clipping.
 
 ### noise
 

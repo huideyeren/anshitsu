@@ -25,6 +25,7 @@ from anshitsu.process.roppongi import roppongi
 from anshitsu.process.sepia import sepia
 from anshitsu.process.sharpness import sharpness
 from anshitsu.process.create_alpha_mask import create_alpha_mask
+from anshitsu.process.ultramarine import ultramarine
 from anshitsu.process.vignette import vignette
 
 
@@ -64,6 +65,7 @@ class Processor:
         ashigara: bool = False,
         crossprocess: bool = False,
         apocalypse: bool = False,
+        ultramarine: bool = False,
         roppongi: bool = False,
         classic: bool = False,
         posterize: Optional[int] = None,
@@ -94,6 +96,7 @@ class Processor:
             ashigara (bool, optional): Apply a vivid color grade inspired by Fujifilm Velvia 100. Defaults to False.
             crossprocess (bool, optional): Apply a random cross-process-style color grade. Defaults to False.
             apocalypse (bool, optional): Apply a red-orange Velvia 100 cross-process preset. Defaults to False.
+            ultramarine (bool, optional): Apply a blue-forward color grade inspired by Kodak Ultramax. Defaults to False.
             roppongi (bool, optional): Apply a smooth fine-grain monochrome preset. Defaults to False.
             classic (bool, optional): Apply a classic high-acutance monochrome preset. Defaults to False.
             posterize (Optional[int], optional): Posterize the image. Defaults to None.
@@ -123,6 +126,7 @@ class Processor:
         self.ashigara = ashigara
         self.crossprocess = crossprocess
         self.apocalypse = apocalypse
+        self.ultramarine = ultramarine
         self.roppongi = roppongi
         self.classic = classic
         self.posterize = posterize
@@ -187,6 +191,9 @@ class Processor:
 
         if self.apocalypse:
             self.image = apocalypse(self.image)
+
+        if self.ultramarine:
+            self.image = ultramarine(self.image)
 
     def _apply_manual_adjustments(self) -> None:
         """
