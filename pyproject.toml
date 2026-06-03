@@ -8,6 +8,11 @@ homepage = "https://github.com/huideyeren"
 repository = "https://github.com/huideyeren/anshitsu"
 documentation = "https://github.com/huideyeren/anshitsu"
 license = "MIT"
+include = [
+    { path = "src/anshitsu/_native/*.dll", format = "wheel" },
+    { path = "src/anshitsu/_native/*.dylib", format = "wheel" },
+    { path = "src/anshitsu/_native/*.so", format = "wheel" },
+]
 
 [tool.poetry-dynamic-versioning]
 enable = true

@@ -36,37 +36,41 @@ jobs:
           echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
           echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
 
-  build-native:
+  build-native-wheels:
     needs: version
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
-            artifact-name: anshitsu-color-linux
-            library-path: native/anshitsu-color/target/release/libanshitsu_color.so
+            artifact-name: anshitsu-native-wheel-linux
           - os: macos-latest
-            artifact-name: anshitsu-color-macos
-            library-path: native/anshitsu-color/target/release/libanshitsu_color.dylib
+            artifact-name: anshitsu-native-wheel-macos
           - os: windows-latest
-            artifact-name: anshitsu-color-windows
-            library-path: native/anshitsu-color/target/release/anshitsu_color.dll
+            artifact-name: anshitsu-native-wheel-windows
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-      - name: Build Rust Backend
-        run: cargo build --release --manifest-path native/anshitsu-color/Cargo.toml
-      - name: Upload Native Backend
+      - name: Install Build Tools
+        run: pipx install poetry==1.8.2
+      - name: Build Native Wheel
+        run: python scripts/build_native_wheel.py
+      - name: Upload Native Wheel
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}
-          path: ${{ matrix.library-path }}
+          path: dist/*.whl
           if-no-files-found: error
 
   publish-python:
-    needs: version
+    needs:
+      - version
+      - build-native-wheels
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -77,8 +81,16 @@ jobs:
         run: pipx install poetry==1.8.2
       - name: Configure PyPI
         run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
-      - name: Build Package
-        run: poetry build
+      - name: Build Source Distribution
+        run: poetry build -f sdist
+      - name: Download Native Wheels
+        uses: actions/download-artifact@v4
+        with:
+          pattern: anshitsu-native-wheel-*
+          path: downloaded-wheels
+          merge-multiple: true
+      - name: Collect Distributions
+        run: cp downloaded-wheels/*.whl dist/
       - name: Publish Package
         run: poetry publish
       - name: Upload Python Distribution
@@ -91,7 +103,7 @@ jobs:
   create-release:
     needs:
       - version
-      - build-native
+      - build-native-wheels
       - publish-python
     runs-on: ubuntu-latest
     steps:
