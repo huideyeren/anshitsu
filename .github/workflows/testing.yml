@@ -7,6 +7,15 @@ on:
     branches: [main]
 
 jobs:
+  rust-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Run Rust Tests
+        run: cargo test --manifest-path native/anshitsu-color/Cargo.toml
+
   testing:
     strategy:
       fail-fast: false
