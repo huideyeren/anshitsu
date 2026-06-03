@@ -4,9 +4,14 @@
 
 [![codecov](https://codecov.io/gh/huideyeren/anshitsu/branch/main/graph/badge.svg?token=ZYRX8NBTLQ)](https://codecov.io/gh/huideyeren/anshitsu)
 
-A tiny digital photographic utility.
+Anshitsu is a small digital photographic utility.
 
-"Anshitsu" means a darkroom in Japanese.
+It was originally created as a simple retouching tool for batch processing
+photos from the command line. "Anshitsu" means "darkroom" in Japanese.
+
+The goal is not to replace a full photo editor. Anshitsu aims to provide
+practical retouching presets that get images roughly 80 percent of the way
+there with a short command.
 
 ## Install
 
@@ -64,6 +69,10 @@ FLAGS
         Type: bool
         Default: False
         Convert to grayscale. Defaults to False.
+    --orthochromatic=ORTHOCHROMATIC
+        Type: bool
+        Default: False
+        Convert to orthochromatic-style grayscale. Defaults to False.
     -i, --invert=INVERT
         Type: bool
         Default: False
@@ -100,14 +109,30 @@ FLAGS
         Type: bool
         Default: False
         Colorize a monochrome image with cyanotype-like Prussian blue. Defaults to False.
-    -r, --rochester=ROCHESTER
+    --rochester=ROCHESTER
         Type: bool
         Default: False
         Apply a warm color grade inspired by Kodak PORTRA 400. Defaults to False.
-    -a, --ashigara=ASHIGARA
+    --ashigara=ASHIGARA
         Type: bool
         Default: False
         Apply a vivid color grade inspired by Fujifilm Velvia 100. Defaults to False.
+    --crossprocess=CROSSPROCESS
+        Type: bool
+        Default: False
+        Apply a random cross-process-style color grade. Defaults to False.
+    --apocalypse=APOCALYPSE
+        Type: bool
+        Default: False
+        Apply a red-orange Velvia 100 cross-process preset. Defaults to False.
+    --roppongi=ROPPONGI
+        Type: bool
+        Default: False
+        Apply a smooth fine-grain monochrome preset. Defaults to False.
+    --classic=CLASSIC
+        Type: bool
+        Default: False
+        Apply a classic high-acutance monochrome preset. Defaults to False.
     -n, --noise=NOISE
         Type: Optional[Union]
         Default: None
@@ -134,11 +159,89 @@ FLAGS
         Darken image edges with a radial vignette. Defaults to None.
 ```
 
-If a directory is specified in the path, an `out` directory will be created in the specified directory, and the converted JPEG and PNG images will be stored in PNG format.
+If a directory is specified in the path, an `anshitsu_out` directory will be created in the specified directory, and the converted JPEG and PNG images will be stored in PNG format.
 
-If you specify a JPEG or PNG image file as the path, an `out` directory will be created in the directory where the image is stored, and the converted image will be stored in PNG format.
+If you specify a JPEG or PNG image file as the path, an `anshitsu_out` directory will be created in the directory where the image is stored, and the converted image will be stored in PNG format.
 
 **Note:** If you specify a file in any other format in the path, be aware there is no error handling. The program will terminate abnormally.
+
+## Library Usage
+
+Anshitsu can also be used as a small image processing library. The core API is
+`Processor`, which accepts a Pillow `Image` and returns a processed Pillow
+`Image`.
+
+``` python
+from PIL import Image
+
+from anshitsu.process.processor import Processor
+
+
+image = Image.open("input.jpg")
+
+processed = Processor(
+    image=image,
+    rochester=True,
+    vignette=0.4,
+    noise=2.0,
+).process()
+
+processed.save("output.png")
+```
+
+The same API can be used from a web API, a desktop GUI application, or another
+Python script. The caller is responsible for reading the input image and saving
+or returning the processed image.
+
+## Processing Flow
+
+Anshitsu applies selected operations in a fixed order. When multiple options are
+specified, this flow defines how they are combined.
+
+```mermaid
+flowchart TD
+    input[Input image] --> alpha[Prepare input]
+    alpha --> invert[Invert]
+    invert --> correction[Base color correction]
+    correction --> colorPresets[Color presets]
+    colorPresets --> manual[Manual adjustments]
+    manual --> monochrome[Monochrome presets]
+    monochrome --> finishing[Finishing adjustments]
+    finishing --> toning[Toning]
+    toning --> output[Output conversion]
+    output --> restoreAlpha[Restore alpha]
+    restoreAlpha --> saved[Saved image]
+
+    alpha -. keep_alpha .-> restoreAlpha
+
+    correction --> caa[colorautoadjust]
+    correction --> stretch[colorstretch]
+
+    colorPresets --> rochester[rochester]
+    colorPresets --> ashigara[ashigara]
+    colorPresets --> crossprocess[crossprocess]
+    colorPresets --> apocalypse[apocalypse]
+
+    manual --> color[color]
+    manual --> brightness[brightness]
+    manual --> sharpness[sharpness]
+    manual --> posterize[posterize]
+
+    monochrome --> grayscale[grayscale]
+    monochrome --> ortho[orthochromatic]
+    monochrome --> roppongi[roppongi]
+    monochrome --> classic[classic]
+
+    finishing --> contrast[contrast and tosaka contrast]
+    finishing --> lineDrawing[line_drawing]
+    finishing --> noise[noise]
+    finishing --> vignette[vignette]
+
+    toning --> sepia[sepia]
+    toning --> cyanotype[cyanotype]
+
+    output --> outputrgb[outputrgb]
+```
 
 ## Algorithms
 
@@ -185,6 +288,12 @@ Convert a color image to grayscale using the algorithm described in the followin
 
 Note: This article is written in Japanese.
 
+### orthochromatic
+
+Converts a color image to orthochromatic-style grayscale.
+
+This conversion darkens red tones and lifts blue tones to approximate the look of older orthochromatic film.
+
 ### Tosaka mode
 
 Tosaka mode is named after Tosaka-senpai's "Tri-X de banzen" line from "Kyūkyoku Chōjin R". It aims for a grainy black-and-white photo look similar to Kodak Tri-X film.
@@ -192,6 +301,18 @@ Tosaka mode is named after Tosaka-senpai's "Tri-X de banzen" line from "Kyūkyok
 Use floating-point numbers when using this mode; values around 2.4 usually work well.
 
 When this mode is specified, color images will also be converted to grayscale.
+
+### roppongi
+
+Applies a smooth fine-grain monochrome preset inspired by Fujifilm ACROS.
+
+This preset uses a mild orthopanchromatic response, compresses highlights, keeps blacks firm, and adds restrained fine grain.
+
+### classic
+
+Applies a classic high-acutance monochrome preset inspired by Kodak TRI-X in Rodinal.
+
+This preset is less aggressive than Tosaka mode. It uses a firm tone curve, visible but restrained grain, mild sharpening, and highlight protection.
 
 ### outputrgb
 
@@ -204,6 +325,18 @@ Applies a warm, low-saturation color grade inspired by Kodak PORTRA 400.
 ### ashigara
 
 Applies a vivid, high-contrast color grade inspired by Fujifilm Velvia 100.
+
+### crossprocess
+
+Applies a random cross-process-style color grade.
+
+Cross processing can produce unpredictable color shifts depending on film, chemistry, and exposure. This preset intentionally varies the color response each time it runs.
+
+### apocalypse
+
+Applies a red-orange cross-process preset inspired by Fujifilm Velvia 100.
+
+This preset leans into the orange-to-red color cast associated with cross-processing Velvia 100. The strength of the red shift varies slightly each time it runs.
 
 ### noise
 
