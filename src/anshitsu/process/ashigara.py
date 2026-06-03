@@ -3,8 +3,8 @@ from PIL import Image
 
 
 def _soft_clip_highlights(image_array: np.ndarray) -> np.ndarray:
-    highlight_start = 0.82
-    compression = 3.0
+    highlight_start = 0.78
+    compression = 3.8
     highlights = np.maximum(image_array - highlight_start, 0.0)
     compressed = highlights / (1.0 + highlights * compression)
     return np.minimum(image_array, highlight_start + compressed)
@@ -22,11 +22,11 @@ def ashigara(image: Image) -> Image:
 
     # Increase contrast with a restrained S-curve.
     image_array = 3 * image_array**2 - 2 * image_array**3
-    image_array = (image_array - 0.5) * 1.06 + 0.5
+    image_array = (image_array - 0.5) * 1.035 + 0.5
 
-    red = image_array[:, :, 0] * 1.03
-    green = image_array[:, :, 1] * 1.025
-    blue = image_array[:, :, 2] * 1.04
+    red = image_array[:, :, 0] * 1.025
+    green = image_array[:, :, 1] * 1.02
+    blue = image_array[:, :, 2] * 1.03
     image_array = np.stack((red, green, blue), axis=2)
 
     luminance = (
@@ -34,7 +34,7 @@ def ashigara(image: Image) -> Image:
         + image_array[:, :, 1] * 0.587
         + image_array[:, :, 2] * 0.114
     )
-    saturation = 1.18
+    saturation = 1.14
     image_array = luminance[:, :, np.newaxis] + (
         image_array - luminance[:, :, np.newaxis]
     ) * saturation

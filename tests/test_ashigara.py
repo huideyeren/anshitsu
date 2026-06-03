@@ -17,7 +17,7 @@ def test_ashigara_preserves_highlight_detail():
     image = Image.new("RGB", (1, 1), (245, 245, 245))
     image = ashigara(image)
 
-    assert max(image.getpixel((0, 0))) < 255
+    assert max(image.getpixel((0, 0))) <= 235
 
 
 def test_ashigara_by_rgb(setup):
