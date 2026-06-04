@@ -113,6 +113,7 @@ jobs:
       - name: Download Release Assets
         uses: actions/download-artifact@v4
         with:
+          name: anshitsu-python-dist
           path: release-assets
       - name: Create GitHub Release
         env:
@@ -120,14 +121,15 @@ jobs:
           RELEASE_NOTE: ${{ github.event.inputs.release_note }}
           TAG: ${{ needs.version.outputs.tag }}
         run: |
+          mapfile -t ASSETS < <(find release-assets -type f | sort)
           if [ -n "${RELEASE_NOTE}" ]; then
             printf "%s\n" "${RELEASE_NOTE}" > RELEASE_NOTES.md
-            gh release create "${TAG}" release-assets/**/* \
+            gh release create "${TAG}" "${ASSETS[@]}" \
               --target "${GITHUB_SHA}" \
               --title "${TAG}" \
               --notes-file RELEASE_NOTES.md
           else
-            gh release create "${TAG}" release-assets/**/* \
+            gh release create "${TAG}" "${ASSETS[@]}" \
               --target "${GITHUB_SHA}" \
               --title "${TAG}" \
               --generate-notes
