@@ -9,7 +9,7 @@ from PIL import Image
 
 def automatic_color_equalization(
     image: Image,
-    samples: int = 500,
+    samples: Optional[int] = None,
     slope: float = 10.0,
     limit: float = 1000.0,
 ) -> Optional[Image]:
@@ -19,6 +19,7 @@ def automatic_color_equalization(
     Args:
         image: RGB image to process.
         samples: Maximum number of spatial samples used for ACE comparison.
+            When omitted, every image pixel is used.
         slope: Slope applied to channel differences before clipping.
         limit: Maximum absolute contrast contribution.
 
@@ -31,6 +32,7 @@ def automatic_color_equalization(
 
     rgb_image = image.convert("RGB")
     width, height = rgb_image.size
+    sample_count = samples if samples is not None else width * height
     buffer = bytearray(rgb_image.tobytes())
     array_type = ctypes.c_ubyte * len(buffer)
     c_buffer = array_type.from_buffer(buffer)
@@ -40,7 +42,7 @@ def automatic_color_equalization(
         ctypes.c_size_t(len(buffer)),
         ctypes.c_size_t(width),
         ctypes.c_size_t(height),
-        ctypes.c_size_t(samples),
+        ctypes.c_size_t(sample_count),
         ctypes.c_float(slope),
         ctypes.c_float(limit),
     )
