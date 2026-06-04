@@ -166,15 +166,54 @@ fn resize_rgb(
     target_height: usize,
 ) -> Vec<u8> {
     let mut resized = vec![0_u8; target_width * target_height * 3];
+    let x_scale = width as f32 / target_width as f32;
+    let y_scale = height as f32 / target_height as f32;
 
     for y in 0..target_height {
-        let source_y = mapped_coordinate(y, target_height, height);
+        let y_start = y as f32 * y_scale;
+        let y_end = (y + 1) as f32 * y_scale;
+        let source_y_start = y_start.floor() as usize;
+        let source_y_end = y_end.ceil().min(height as f32) as usize;
         for x in 0..target_width {
-            let source_x = mapped_coordinate(x, target_width, width);
-            let source_index = (source_y * width + source_x) * 3;
+            let x_start = x as f32 * x_scale;
+            let x_end = (x + 1) as f32 * x_scale;
+            let source_x_start = x_start.floor() as usize;
+            let source_x_end = x_end.ceil().min(width as f32) as usize;
             let target_index = (y * target_width + x) * 3;
-            resized[target_index..target_index + 3]
-                .copy_from_slice(&data[source_index..source_index + 3]);
+            let mut total = [0.0_f32; 3];
+            let mut weight_total = 0.0_f32;
+
+            for source_y in source_y_start..source_y_end {
+                let pixel_y_start = source_y as f32;
+                let pixel_y_end = pixel_y_start + 1.0;
+                let y_weight = (y_end.min(pixel_y_end) - y_start.max(pixel_y_start)).max(0.0);
+                if y_weight <= 0.0 {
+                    continue;
+                }
+
+                for source_x in source_x_start..source_x_end {
+                    let pixel_x_start = source_x as f32;
+                    let pixel_x_end = pixel_x_start + 1.0;
+                    let x_weight = (x_end.min(pixel_x_end) - x_start.max(pixel_x_start)).max(0.0);
+                    if x_weight <= 0.0 {
+                        continue;
+                    }
+
+                    let weight = x_weight * y_weight;
+                    let source_index = (source_y * width + source_x) * 3;
+                    for channel in 0..3 {
+                        total[channel] += data[source_index + channel] as f32 * weight;
+                    }
+                    weight_total += weight;
+                }
+            }
+
+            if weight_total > 0.0 {
+                for channel in 0..3 {
+                    resized[target_index + channel] =
+                        (total[channel] / weight_total).round().clamp(0.0, 255.0) as u8;
+                }
+            }
         }
     }
 
@@ -240,15 +279,15 @@ fn apply_correction_map(
     map_width: usize,
     map_height: usize,
 ) {
+    let source = data.to_vec();
     for y in 0..height {
         let (y0, y1, y_weight) = interpolation_axis(y, height, map_height);
         for x in 0..width {
             let (x0, x1, x_weight) = interpolation_axis(x, width, map_width);
             let pixel_index = (y * width + x) * 3;
-            let luminance = data[pixel_index] as f32 * 0.299
-                + data[pixel_index + 1] as f32 * 0.587
-                + data[pixel_index + 2] as f32 * 0.114;
+            let luminance = pixel_luminance(&source, width, x, y);
             let shadow_weight = shadow_correction_weight(luminance);
+            let edge_weight = local_edge_weight(&source, width, height, x, y, luminance);
 
             for channel in 0..3 {
                 let top_left = correction_value(correction_map, map_width, x0, y0, channel);
@@ -261,10 +300,10 @@ fn apply_correction_map(
                     .clamp(-ACE_CORRECTION_LIMIT, ACE_CORRECTION_LIMIT);
                 if correction < 0.0 {
                     correction *= ACE_NEGATIVE_CORRECTION_SCALE
-                        * local_darkening_weight(data, width, height, x, y, luminance);
+                        * local_darkening_weight(&source, width, height, x, y, luminance);
                 }
-                correction *= ACE_CORRECTION_STRENGTH * shadow_weight;
-                let value = data[pixel_index + channel] as f32 + correction;
+                correction *= ACE_CORRECTION_STRENGTH * shadow_weight * edge_weight;
+                let value = source[pixel_index + channel] as f32 + correction;
                 data[pixel_index + channel] = value.round().clamp(0.0, 255.0) as u8;
             }
         }
@@ -317,6 +356,48 @@ fn local_darkening_weight(
     1.0 - 0.78 * edge_strength
 }
 
+fn local_edge_weight(
+    data: &[u8],
+    width: usize,
+    height: usize,
+    x: usize,
+    y: usize,
+    luminance: f32,
+) -> f32 {
+    let (_, _, min_luminance, max_luminance) = local_luminance_stats(data, width, height, x, y);
+    let contrast = (max_luminance - min_luminance).max((luminance - min_luminance).abs());
+    1.0 - 0.42 * smoothstep(24.0, 96.0, contrast)
+}
+
+fn local_luminance_stats(
+    data: &[u8],
+    width: usize,
+    height: usize,
+    x: usize,
+    y: usize,
+) -> (f32, f32, f32, f32) {
+    let x_start = x.saturating_sub(1);
+    let y_start = y.saturating_sub(1);
+    let x_end = (x + 1).min(width - 1);
+    let y_end = (y + 1).min(height - 1);
+    let mut total = 0.0_f32;
+    let mut count = 0.0_f32;
+    let mut min_luminance = f32::INFINITY;
+    let mut max_luminance = f32::NEG_INFINITY;
+
+    for sample_y in y_start..=y_end {
+        for sample_x in x_start..=x_end {
+            let value = pixel_luminance(data, width, sample_x, sample_y);
+            total += value;
+            count += 1.0;
+            min_luminance = min_luminance.min(value);
+            max_luminance = max_luminance.max(value);
+        }
+    }
+
+    (total, count, min_luminance, max_luminance)
+}
+
 fn pixel_luminance(data: &[u8], width: usize, x: usize, y: usize) -> f32 {
     let index = (y * width + x) * 3;
     data[index] as f32 * 0.299 + data[index + 1] as f32 * 0.587 + data[index + 2] as f32 * 0.114
@@ -351,13 +432,6 @@ fn interpolation_axis(position: usize, length: usize, map_length: usize) -> (usi
     let upper = (lower + 1).min(map_length - 1);
     let weight = (numerator % denominator) as f32 / denominator as f32;
     (lower, upper, weight)
-}
-
-fn mapped_coordinate(position: usize, length: usize, source_length: usize) -> usize {
-    if length <= 1 || source_length <= 1 {
-        return 0;
-    }
-    (position * (source_length - 1) + (length - 1) / 2) / (length - 1)
 }
 
 /// Apply gray-world white balance followed by per-channel color stretching.
@@ -539,7 +613,10 @@ pub unsafe extern "C" fn anshitsu_color_stretch_rgb(
 
 #[cfg(test)]
 mod tests {
-    use super::{automatic_color_equalization_rgb, color_stretch_rgb, local_darkening_weight};
+    use super::{
+        automatic_color_equalization_rgb, color_stretch_rgb, local_darkening_weight,
+        local_edge_weight, resize_rgb,
+    };
 
     #[test]
     fn keeps_constant_images_stable() {
@@ -604,6 +681,34 @@ mod tests {
         let weight = local_darkening_weight(&data, 3, 3, 1, 1, 16.0);
 
         assert!(weight < 0.5);
+    }
+
+    #[test]
+    fn local_edge_weight_suppresses_high_contrast_edges() {
+        let data = vec![
+            16, 16, 16, 16, 16, 16, 224, 224, 224, 16, 16, 16, 16, 16, 16, 224, 224, 224, 16, 16,
+            16, 16, 16, 16, 224, 224, 224,
+        ];
+
+        let weight = local_edge_weight(&data, 3, 3, 1, 1, 16.0);
+
+        assert!(weight < 0.7);
+    }
+
+    #[test]
+    fn resize_rgb_uses_area_average_when_downscaling() {
+        let data = vec![
+            0, 0, 0, 10, 20, 30, 20, 40, 60, 30, 60, 90, 40, 80, 120, 50, 100, 150, 60, 120, 180,
+            70, 140, 210, 80, 160, 240, 90, 180, 255, 100, 200, 255, 110, 220, 255, 120, 240, 255,
+            130, 255, 255, 140, 255, 255, 150, 255, 255,
+        ];
+
+        let resized = resize_rgb(&data, 4, 4, 2, 2);
+
+        assert_eq!(
+            resized,
+            vec![25, 50, 75, 45, 90, 135, 105, 209, 251, 125, 233, 255]
+        );
     }
 
     #[test]
