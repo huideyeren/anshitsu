@@ -125,9 +125,7 @@ def _find_library_path() -> Optional[Path]:
             return path
 
     library_name = _library_name()
-    candidates = [
-        Path(__file__).resolve().parents[1] / "_native" / library_name,
-    ]
+    candidates = []
     repository_root = _repository_root()
     if repository_root is not None:
         candidates.append(
@@ -146,6 +144,8 @@ def _find_library_path() -> Optional[Path]:
             / "debug"
             / library_name
         )
+
+    candidates.append(Path(__file__).resolve().parents[1] / "_native" / library_name)
 
     for candidate in candidates:
         if candidate.exists():
