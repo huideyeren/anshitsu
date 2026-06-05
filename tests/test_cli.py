@@ -1,5 +1,6 @@
 import fire
 import pytest
+from PIL import Image
 
 from anshitsu.__version__ import version
 from anshitsu.cli import cli
@@ -81,7 +82,24 @@ def test_main_for_invalid_directory(capfd, setup):
     captured = capfd.readouterr()
     error = captured.err
 
-    assert "There are no JPEG or PNG files in this directory." in error
+    assert "There are no JPEG, PNG, or RAW files in this directory." in error
+
+
+def test_main_for_raw_file(monkeypatch, capsys, setup):
+    raw_path = setup / "input.dng"
+    raw_path.write_bytes(b"raw")
+
+    def open_image(path):
+        assert path == str(raw_path)
+        return Image.new("RGB", (1, 1), (1, 2, 3))
+
+    monkeypatch.setattr("anshitsu.cli.open_image", open_image)
+
+    fire.Fire(cli, [str(raw_path)])
+    captured = capsys.readouterr()
+    result = captured.out
+
+    assert "The cli was completed successfully." in result
 
 
 def test_main_for_invalid_file(capfd, setup):

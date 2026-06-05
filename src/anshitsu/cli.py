@@ -3,13 +3,19 @@ import glob
 import os
 import os.path
 import re
+import shutil
 from typing import Optional
 
 import fire
 import fire.core
-from PIL import Image, UnidentifiedImageError
+from PIL import UnidentifiedImageError
 
 from anshitsu.__version__ import version as __version__
+from anshitsu.image_io import (
+    RawProcessingError,
+    is_supported_image_file,
+    open_image,
+)
 from anshitsu.process.processor import Processor
 
 
@@ -99,21 +105,24 @@ def cli(
         return "Anshitsu version {}".format(__version__)
     if path is None:
         raise fire.core.FireError("No path specified!")
-    types = ("*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.png", "*.PNG")
     files_glob = []
     return_path = ""
     now_s = datetime.datetime.now()
     output_dir = "anshitsu_out"
     original_dir = "anshitsu_orig"
     if os.path.isdir(path):
-        for type in types:
-            files_glob.extend(glob.glob(os.path.join(path, "**", type), recursive=True))
-        files_glob = [file for file in files_glob if not file.__contains__(output_dir)]
+        files_glob = [
+            file
+            for file in glob.glob(os.path.join(path, "**", "*"), recursive=True)
+            if os.path.isfile(file)
+            and is_supported_image_file(file)
+            and not file.__contains__(output_dir)
+        ]
         return_path = path
 
         if len(files_glob) == 0:
             raise fire.core.FireError(
-                "There are no JPEG or PNG files in this directory."
+                "There are no JPEG, PNG, or RAW files in this directory."
             )
     elif os.path.isfile(path):
         files_glob.extend(glob.glob(path))
@@ -124,8 +133,8 @@ def cli(
         os.makedirs(os.path.join(return_path, original_dir))
     for i, file in enumerate(files_glob):
         try:
-            image = Image.open(file)
-        except UnidentifiedImageError as e:
+            image = open_image(file)
+        except (UnidentifiedImageError, RawProcessingError) as e:
             raise fire.core.FireError(e)
         exif = image.getexif()
         original_filename: str = os.path.split(file)[1]
@@ -133,18 +142,12 @@ def cli(
         timestamp = now_s.strftime("%Y-%m-%d_%H-%M-%S")
         if overwrite is True:
             backup_filename = original_filename
-            image.save(os.path.join(return_path, original_dir, backup_filename))
+            shutil.copy2(file, os.path.join(return_path, original_dir, backup_filename))
             filename = os.path.join(
                 return_path, re.sub(r"\.[^.]+$", "", original_filename) + ".png"
             )
-            remove_file_list = [".jpg", ".JPG", ".jpeg", ".JPEG", ".PNG"]
-            for remove_file in remove_file_list:
-                remove_file_name = (
-                    re.sub(r"\.[^.]+$", "", original_filename) + remove_file
-                )
-                remove_file_path = os.path.join(return_path, remove_file_name)
-                if os.path.isfile(remove_file_path):
-                    os.remove(remove_file_path)
+            if os.path.abspath(file) != os.path.abspath(filename):
+                os.remove(file)
         else:
             filename = os.path.join(
                 return_path,

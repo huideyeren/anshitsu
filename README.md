@@ -163,11 +163,13 @@ FLAGS
         Darken image edges with a radial vignette. Defaults to None.
 ```
 
-If a directory is specified in the path, an `anshitsu_out` directory will be created in the specified directory, and the converted JPEG and PNG images will be stored in PNG format.
+If a directory is specified in the path, an `anshitsu_out` directory will be created in the specified directory, and the converted JPEG, PNG, and supported RAW images will be stored in PNG format.
 
-If you specify a JPEG or PNG image file as the path, an `anshitsu_out` directory will be created in the directory where the image is stored, and the converted image will be stored in PNG format.
+If you specify a JPEG, PNG, or supported RAW image file as the path, an `anshitsu_out` directory will be created in the directory where the image is stored, and the converted image will be stored in PNG format.
 
-**Note:** If you specify a file in any other format in the path, be aware there is no error handling. The program will terminate abnormally.
+RAW images are developed with `rawpy` before entering the normal Anshitsu processing pipeline. RAW support depends on the LibRaw support available through the installed `rawpy` version.
+
+**Note:** Unsupported file formats are skipped during directory processing. If an unsupported file is specified directly, Pillow or the RAW loader will report an error.
 
 ## Library Usage
 
@@ -176,12 +178,11 @@ Anshitsu can also be used as a small image processing library. The core API is
 `Image`.
 
 ``` python
-from PIL import Image
-
+from anshitsu.image_io import open_image
 from anshitsu.process.processor import Processor
 
 
-image = Image.open("input.jpg")
+image = open_image("input.jpg")
 
 processed = Processor(
     image=image,
