@@ -75,7 +75,9 @@ def open_image(path: PathLike) -> Image.Image:
     """
     if is_raw_image_file(path):
         return develop_raw_image(path)
-    return Image.open(path)
+    with Image.open(path) as image:
+        image.load()
+        return image.copy()
 
 
 def develop_raw_image(path: PathLike) -> Image.Image:
