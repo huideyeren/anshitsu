@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "anshitsu"
-version = "3.2.3"  # using poetry-dynamic-versioning
+version = "4.0.0"  # using poetry-dynamic-versioning
 description = "A tiny digital photographic utility."
 readme = "README.md"
 authors = ["Iosif Takakura <iosif@huideyeren.info>"]
@@ -24,6 +24,7 @@ numpy = "*"
 Pillow = "*"
 colorcorrect = "*"
 fire = "*"
+rawpy = "^0.27.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
