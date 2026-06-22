@@ -12,7 +12,10 @@ from PIL import UnidentifiedImageError
 
 from anshitsu.__version__ import version as __version__
 from anshitsu.image_io import (
+    PNG_TEXT_METADATA_KEY,
     RawProcessingError,
+    create_png_metadata_info,
+    get_exif_bytes,
     is_supported_image_file,
     open_image,
 )
@@ -136,7 +139,10 @@ def cli(
             image = open_image(file)
         except (UnidentifiedImageError, RawProcessingError) as e:
             raise fire.core.FireError(e)
-        exif = image.getexif()
+        exif = get_exif_bytes(image)
+        icc_profile = image.info.get("icc_profile")
+        xmp = image.info.get("xmp")
+        png_text = image.info.get(PNG_TEXT_METADATA_KEY)
         original_filename: str = os.path.split(file)[1]
         extension = original_filename.split(".")[-1]
         timestamp = now_s.strftime("%Y-%m-%d_%H-%M-%S")
@@ -189,7 +195,14 @@ def cli(
             filename,
             quality=100,  # Specify 100 as the highest image quality
             subsampling=0,
+            # Original bytes preserve nested IFDs and non-standard text without
+            # a potentially lossy parse-and-reserialize cycle.
             exif=exif,
+            icc_profile=icc_profile if isinstance(icc_profile, bytes) else None,
+            pnginfo=create_png_metadata_info(
+                png_text if isinstance(png_text, dict) else None,
+                xmp if isinstance(xmp, bytes) else None,
+            ),
         )
         print("{0}/{1} done!".format((i + 1), str(len(files_glob))))
 

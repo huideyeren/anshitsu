@@ -1,9 +1,10 @@
 import fire
 import pytest
-from PIL import Image
+from PIL import ExifTags, Image, ImageCms
 
 from anshitsu.__version__ import version
 from anshitsu.cli import cli
+from anshitsu.image_io import create_png_metadata_info
 
 
 def test_main_for_dir(capsys, setup):
@@ -18,6 +19,47 @@ def test_main_for_image_file(capsys, setup):
     captured = capsys.readouterr()
     result = captured.out
     assert "The cli was completed successfully." in result
+
+
+@pytest.mark.parametrize("extension", ["jpg", "png"])
+def test_main_preserves_standard_image_exif(tmp_path, extension):
+    """CLI output must retain EXIF, ICC, and XMP from JPEG and PNG inputs."""
+    source = tmp_path / f"input.{extension}"
+    exif = Image.Exif()
+    exif_ifd = exif.get_ifd(ExifTags.IFD.Exif)
+    exif_ifd[ExifTags.Base.LensMake] = "Example Lens Maker"
+    exif_ifd[ExifTags.Base.LensModel] = "Example 35mm F2"
+    icc_profile = ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes()
+    xmp = b'<x:xmpmeta xmlns:x="adobe:ns:meta/">metadata</x:xmpmeta>'
+    save_options = {"exif": exif.tobytes(), "icc_profile": icc_profile}
+    if extension == "jpg":
+        save_options["xmp"] = xmp
+    else:
+        save_options["pnginfo"] = create_png_metadata_info(
+            {
+                "Comment": "日本語の説明",
+                "Description": "VRChat screenshot metadata",
+                "Make": "Example Application",
+                "Raw profile type iptc": "IPTC profile data",
+            },
+            xmp,
+        )
+    Image.new("RGB", (2, 2), (1, 2, 3)).save(source, **save_options)
+
+    cli(str(source))
+
+    output = next((tmp_path / "anshitsu_out").glob("*.png"))
+    with Image.open(output) as saved_image:
+        saved_exif_ifd = saved_image.getexif().get_ifd(ExifTags.IFD.Exif)
+        assert saved_exif_ifd[ExifTags.Base.LensMake] == "Example Lens Maker"
+        assert saved_exif_ifd[ExifTags.Base.LensModel] == "Example 35mm F2"
+        assert saved_image.info["icc_profile"] == icc_profile
+        assert saved_image.info["xmp"] == xmp
+        if extension == "png":
+            assert saved_image.text["Comment"] == "日本語の説明"
+            assert saved_image.text["Description"] == "VRChat screenshot metadata"
+            assert saved_image.text["Make"] == "Example Application"
+            assert saved_image.text["Raw profile type iptc"] == "IPTC profile data"
 
 
 def test_main_for_vignette(capsys, setup):
