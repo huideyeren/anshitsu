@@ -145,6 +145,10 @@ FLAGS
         Type: bool
         Default: False
         Overwrite original files. Defaults to False.
+    --jpeg=JPEG
+        Type: bool
+        Default: False
+        Save the processed image as JPEG instead of the default PNG.
     --version=VERSION
         Type: bool
         Default: False
@@ -163,9 +167,14 @@ FLAGS
         Darken image edges with a radial vignette. Defaults to None.
 ```
 
-If a directory is specified in the path, an `anshitsu_out` directory will be created in the specified directory, and the converted JPEG, PNG, and supported RAW images will be stored in PNG format.
+If a directory is specified in the path, an `anshitsu_out` directory will be created in the specified directory. Converted JPEG, PNG, and supported RAW images are stored in PNG format by default. Add `--jpeg` to save them as JPEG instead.
 
-If you specify a JPEG, PNG, or supported RAW image file as the path, an `anshitsu_out` directory will be created in the directory where the image is stored, and the converted image will be stored in PNG format.
+If you specify a JPEG, PNG, or supported RAW image file as the path, an `anshitsu_out` directory will be created in the directory where the image is stored. The same PNG default and `--jpeg` selection apply.
+
+```shell
+anshitsu photo.png
+anshitsu photo.png --jpeg
+```
 
 RAW images are developed with `rawpy` before entering the normal Anshitsu processing pipeline. RAW support depends on the LibRaw support available through the installed `rawpy` version.
 
