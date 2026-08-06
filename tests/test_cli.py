@@ -21,6 +21,78 @@ def test_main_for_image_file(capsys, setup):
     assert "The cli was completed successfully." in result
 
 
+def test_main_saves_jpeg_when_jpeg_option_is_given(tmp_path):
+    """The JPEG option must select a JPEG container and filename."""
+    source = tmp_path / "input.png"
+    Image.new("RGB", (2, 2), (1, 2, 3)).save(source)
+
+    cli(str(source), jpeg=True)
+
+    output = next((tmp_path / "anshitsu_out").glob("*.jpg"))
+    assert output.suffix == ".jpg"
+    with Image.open(output) as saved_image:
+        assert saved_image.format == "JPEG"
+
+
+def test_main_flattens_transparent_pixels_over_white_for_jpeg(tmp_path):
+    """The JPEG option must make transparent output visible against white."""
+    source = tmp_path / "transparent.png"
+    Image.new("RGBA", (1, 1), (0, 0, 0, 0)).save(source)
+
+    cli(str(source), jpeg=True, keep_alpha=True)
+
+    output = next((tmp_path / "anshitsu_out").glob("*.jpg"))
+    with Image.open(output) as saved_image:
+        red, green, blue = saved_image.convert("RGB").getpixel((0, 0))
+    assert red > 245
+    assert green > 245
+    assert blue > 245
+
+
+def test_main_uses_png_by_default(tmp_path):
+    """Omitting the JPEG option must preserve the established PNG default."""
+    source = tmp_path / "input.jpg"
+    Image.new("RGB", (2, 2), (1, 2, 3)).save(source)
+
+    cli(str(source))
+
+    output = next((tmp_path / "anshitsu_out").glob("*.png"))
+    with Image.open(output) as saved_image:
+        assert saved_image.format == "PNG"
+
+
+def test_main_uses_jpeg_extension_in_overwrite_mode(tmp_path):
+    """Overwrite mode must use the selected output extension and keep a backup."""
+    source = tmp_path / "input.png"
+    Image.new("RGB", (2, 2), (1, 2, 3)).save(source)
+
+    cli(str(source), jpeg=True, overwrite=True)
+
+    assert (tmp_path / "input.jpg").is_file()
+    assert (tmp_path / "anshitsu_orig" / "input.png").is_file()
+
+
+def test_main_preserves_jpeg_compatible_metadata_for_jpeg_output(tmp_path):
+    """JPEG output must retain EXIF, ICC profile, and XMP metadata."""
+    source = tmp_path / "input.jpg"
+    exif = Image.Exif()
+    exif.get_ifd(ExifTags.IFD.Exif)[ExifTags.Base.LensModel] = "Example 35mm F2"
+    icc_profile = ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes()
+    xmp = b'<x:xmpmeta xmlns:x="adobe:ns:meta/">metadata</x:xmpmeta>'
+    Image.new("RGB", (2, 2), (1, 2, 3)).save(
+        source, exif=exif.tobytes(), icc_profile=icc_profile, xmp=xmp
+    )
+
+    cli(str(source), jpeg=True)
+
+    output = next((tmp_path / "anshitsu_out").glob("*.jpg"))
+    with Image.open(output) as saved_image:
+        saved_exif_ifd = saved_image.getexif().get_ifd(ExifTags.IFD.Exif)
+        assert saved_exif_ifd[ExifTags.Base.LensModel] == "Example 35mm F2"
+        assert saved_image.info["icc_profile"] == icc_profile
+        assert saved_image.info["xmp"] == xmp
+
+
 @pytest.mark.parametrize("extension", ["jpg", "png"])
 def test_main_preserves_standard_image_exif(tmp_path, extension):
     """CLI output must retain EXIF, ICC, and XMP from JPEG and PNG inputs."""
